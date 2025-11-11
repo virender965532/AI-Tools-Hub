@@ -1,0 +1,151 @@
+{
+  "root": [
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Leading global financial services firm primarily engaged in banking."
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Major American bank providing various banking and financial services."
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Global bank with a broad portfolio of banking activities."
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Well-established bank focused on retail banking and commercial lending."
+    },
+    {
+      "ticker": "HSBC",
+      "name": "HSBC Holdings plc",
+      "exchange": "NYSE",
+      "country": "UK",
+      "industry_match_reason": "Global bank providing a range of services in personal, commercial, and investment banking."
+    },
+    {
+      "ticker": "DB",
+      "name": "Deutsche Bank AG",
+      "exchange": "NYSE",
+      "country": "Germany",
+      "industry_match_reason": "Universal bank with a significant focus on commercial and investment banking."
+    },
+    {
+      "ticker": "BNP",
+      "name": "BNP Paribas S.A.",
+      "exchange": "Euronext Paris",
+      "country": "France",
+      "industry_match_reason": "Leading French bank with a wide range of retail banking services."
+    },
+    {
+      "ticker": "BMO",
+      "name": "Bank of Montreal",
+      "exchange": "NYSE",
+      "country": "Canada",
+      "industry_match_reason": "Significant Canadian bank offering various financial services."
+    },
+    {
+      "ticker": "TD",
+      "name": "Toronto-Dominion Bank",
+      "exchange": "NYSE",
+      "country": "Canada",
+      "industry_match_reason": "Major Canadian bank with a strong retail banking presence."
+    },
+    {
+      "ticker": "ICICI",
+      "name": "ICICI Bank Limited",
+      "exchange": "NSE",
+      "country": "India",
+      "industry_match_reason": "Leading private sector bank in India focused on retail and commercial banking."
+    },
+    {
+      "ticker": "HDFC",
+      "name": "HDFC Bank Limited",
+      "exchange": "NSE",
+      "country": "India",
+      "industry_match_reason": "Major Indian bank known for its wide range of loans and banking services."
+    },
+    {
+      "ticker": "SBI",
+      "name": "State Bank of India",
+      "exchange": "NSE",
+      "country": "India",
+      "industry_match_reason": "Largest public sector bank in India with diverse banking services."
+    },
+    {
+      "ticker": "HSBC",
+      "name": "HSBC Holdings plc",
+      "exchange": "LON",
+      "country": "UK",
+      "industry_match_reason": "International bank with a focus on commercial and retail banking businesses."
+    },
+    {
+      "ticker": "UBS",
+      "name": "UBS Group AG",
+      "exchange": "NYSE",
+      "country": "Switzerland",
+      "industry_match_reason": "Global financial services company with a focus on wealth management and banking."
+    },
+    {
+      "ticker": "BNY",
+      "name": "The Bank of New York Mellon Corporation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Leading bank focused on asset management and securities servicing."
+    },
+    {
+      "ticker": "PNC",
+      "name": "PNC Financial Services Group, Inc.",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Wide-ranging banking services, including retail banking and asset management."
+    },
+    {
+      "ticker": "KEY",
+      "name": "KeyCorp",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Regional bank providing various banking and financial services."
+    },
+    {
+      "ticker": "RF",
+      "name": "Regions Financial Corporation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Regional bank in the Southeastern USA focusing on retail and commercial banking."
+    },
+    {
+      "ticker": "CFG",
+      "name": "Citizens Financial Group, Inc.",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Focus on retail and commercial banking services in the U.S."
+    },
+    {
+      "ticker": "ZION",
+      "name": "Zions Bancorporation, National Association",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "industry_match_reason": "Regional bank offering banking services primarily in the western U.S."
+    },
+    {
+      "ticker": "TFC",
+      "name": "Truist Financial Corporation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "industry_match_reason": "Large regional bank formed from the merger of BB&T and SunTrust."
+    }
+  ]
+}

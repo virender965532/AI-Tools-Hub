@@ -1,0 +1,4 @@
+core_terms: ["bank", "loan", "credit", "deposit", "savings account", "mortgage", "checking account", "branch", "transaction", "interest rate", "withdrawal", "financial institution"]
+  adjacent_terms: ["financial services", "investment banking", "retail banking", "commercial banking", "credit union", "banking regulation", "online banking", "payment processing"]
+  scope_note: "Includes all types of banking activities and institutions; excludes non-financial services and businesses outside the scope of banking such as insurance and investments."
+  pitfalls: ["mixing banking with financial services like insurance", "confusing retail banking with investment banking", "including fintech companies outside traditional banking", "overlapping with accounting services", "associating banking with securities trading", "failing to distinguish between banking and other non-bank financial institutions"]

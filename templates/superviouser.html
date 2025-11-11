@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send Email via Superviouser AI Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'theme-blue': '#2563eb',
+            'theme-light': '#eff6ff',
+            'theme-dark': '#1e3a8a'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-theme-light to-white min-h-screen flex items-center justify-center p-6">
+  <!-- Home Icon -->
+  <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-theme-blue hover:text-theme-dark transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+    </svg>
+  </a>
+
+  <div class="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-full border border-gray-200">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-theme-dark">📧 Superviouser AI Email Sender</h2>
+      <p class="text-gray-600 mt-2">Automate your cold email creation with smart AI-powered agents.</p>
+    </div>
+
+    <!-- Alerts Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-4 mb-6">
+          {% for category, message in messages %}
+            <div class="px-4 py-3 rounded-lg border-l-4 shadow-sm transition duration-300 
+                 {% if category == 'success' %}bg-green-50 border-green-500 text-green-700
+                 {% elif category == 'danger' %}bg-red-50 border-red-500 text-red-700
+                 {% elif category == 'warning' %}bg-yellow-50 border-yellow-500 text-yellow-700
+                 {% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Form -->
+    <form method="POST" class="space-y-6">
+      <div>
+        <label for="email" class="block font-medium text-gray-700 mb-1">Recipient Email</label>
+        <input 
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Enter recipient email"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue transition"
+        />
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Professional Sales Agent</label>
+        <textarea 
+          name="instructions1" rows="2" 
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue transition"
+        >You are a sales agent working for ComplAI, a company that provides a SaaS tool for ensuring SOC2 compliance and preparing for audits, powered by AI. You write professional, serious cold emails.</textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Humorous Sales Agent</label>
+        <textarea 
+          name="instructions2" rows="2" 
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue transition"
+        >You are a humorous, engaging sales agent working for ComplAI, a company that provides a SaaS tool for ensuring SOC2 compliance and preparing for audits, powered by AI. You write witty, engaging cold emails that are likely to get a response.</textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Concise Sales Agent</label>
+        <textarea 
+          name="instructions3" rows="2" 
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue transition"
+        >You are a busy sales agent working for ComplAI, a company that provides a SaaS tool for ensuring SOC2 compliance and preparing for audits, powered by AI. You write concise, to the point cold emails.</textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Sales Manager Instructions</label>
+        <textarea 
+          name="manager_instructions" rows="3" 
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue transition"
+          >
+Role: You are a Sales Manager at ComplAI.
+Goal: Generate cold sales email drafts using the sales_agent tools, then select the best one for final formatting and handoff.
+
+Follow these strict steps exactly — do not repeat or loop any step.
+
+1. Generate Drafts:
+- You must call exactly three tools, one time each:
+  • Professional Sales Agent → exactly once
+  • Engaging Sales Agent → exactly once
+  • Busy Sales Agent → exactly once
+- Each tool must return its own cold email draft (only one per tool).
+- Do not call any tool more than once under any circumstance.
+- Do not repeat this step after the three calls are made.
+- Instruct each tool to address the email to Sanjay Kumar and include:
+  Sender: Virender Kumar (AI Team Lead)
+  Contact: 9821592146
+  Website: http://www.ritishka.in
+
+2. Review and Select:
+- After receiving exactly three drafts (one from each tool), stop generating.
+- Review the three drafts and select the single best email based on clarity and effectiveness.
+- Do not regenerate or re-call any tool.
+
+3. Personalize:
+- In the chosen email, ensure the following details appear correctly:
+  Recipient's Name: Sanjay Kumar
+  Your Name: Virender Kumar
+  Your Position: AI Team Lead
+  Your Contact Information: 9821592146
+  Website URL: http://www.ritishka.in
+- Replace any placeholders if needed.
+
+4. Handoff:
+- Provide only the final selected and fully personalized email draft to the Email Manager agent.
+- The Email Manager will add a subject, convert the email to HTML, and send it.
+- Do not re-call any sales agent or modify drafts after this step.
+
+Critical Rules:
+- You must make exactly three total sales_agent tool calls (one per agent).
+- You must not loop, retry, or regenerate after the three drafts are received.
+- If any tool fails or provides fewer drafts, proceed with what you have.
+- Never write your own email content.
+
+        </textarea>
+      </div>
+
+      <div class="flex flex-row w-full items-center justify-center">
+        <button 
+          type="submit"
+          class="m-auto w-1/3 py-3 font-semibold text-white bg-theme-blue hover:bg-theme-dark rounded-lg shadow-md transform hover:scale-[1.02] transition"
+        >
+          🚀 Send Email
+        </button>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center">
+      <a href="/" class="text-theme-blue hover:underline hover:text-theme-dark transition">&larr; Back to Home</a>
+    </div>
+  </div>
+
+</body>
+</html>

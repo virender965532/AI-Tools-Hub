@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Tools Hub</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'theme-blue': '#2563eb',
+            'theme-light': '#eff6ff',
+            'theme-dark': '#1e3a8a'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="w-full py-2 bg-white shadow-md sticky top-0 z-10 m-0 mb-[80px] flex flex-col items-center">
+  <h1 class="text-2xl md:text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-red-500">
+    🤖 AI Tools Hub 🚀
+  </h1>
+  <h3 class="text-lg md:text-lg font-semibold tracking-wide text-red-500">
+    Explore advanced AI systems of the future
+  </h3>
+</header>
+
+
+  <section class="flex flex-wrap justify-center gap-6 px-4">
+  {% for tool in tools %}
+    <a 
+      href="{{ tool.url }}" 
+      class="bg-white rounded-xl shadow-lg hover:shadow-xl transition p-5 w-full sm:w-[22rem] md:w-[20rem] lg:w-[33rem]"
+    >
+      <div class="flex items-center gap-4 mb-3">
+        <img 
+          src="{{ url_for('static', filename=tool.image) }}" 
+          alt="{{ tool.title }}" 
+          class="w-[100px] h-auto object-cover rounded-md flex-shrink-0"
+        />
+        <h3 class="text-lg font-semibold text-gray-800 text-justify">{{ tool.title }}</h3>
+      </div>
+      <p class="text-gray-600 text-sm leading-relaxed text-justify">
+        {{ tool.description }}
+      </p>
+    </a>
+  {% endfor %}
+</section>
+
+
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 bg-gray-800 text-center text-white">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

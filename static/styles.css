@@ -1,0 +1,90 @@
+/* Base styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: url("/static/images/dark-ai-tech-bg.png") no-repeat center center fixed;
+  background-size: cover;
+  color: #e0e7ff;
+  /* padding: 30px; */
+  text-align: center;
+}
+
+/* Header styles */
+h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+
+.glow {
+  color: #ff0000;
+  text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 30px #29b6f6;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #0d2938;
+}
+
+/* Grid design */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Cards */
+.card {
+  background: rgba(0, 17, 26, 0.85);
+  border: 1px solid #00eaff;
+  border-radius: 12px;
+  padding: 25px;
+  text-decoration: none;
+  color: #e0e7ff;
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.6);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 35px rgba(0, 255, 204, 0.8);
+}
+
+.robot-span {
+  height:100px;
+  width:150px;
+  margin-bottom: 5px;
+  display: inline-table;
+}
+
+/* Robot images */
+.robot-img {
+  width: 100px;
+  height: auto;
+  /* margin-bottom: 15px; */
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.7));
+}
+
+.description {
+  font-size: 0.95rem;
+  width: 100%;
+  text-align: justify;
+  /* margin-bottom: -15px; */
+  color: #cfd8ff;
+  overflow: hidden;
+}
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #6fbaf9;
+}

@@ -1,0 +1,10 @@
+flask
+python-dotenv
+openai-agents
+sendgrid
+aiohttp
+sib-api-v3-sdk
+pydantic
+uv
+crewai-sdk
+crewai

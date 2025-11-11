@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuro Debate AI - Autonomous Multi-Agent Debate System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    textarea { min-height: 80px; }
+  </style>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-100 via-white to-indigo-100 min-h-screen flex flex-col items-center">
+  <!-- HEADER -->
+  <header class="w-full py-6 bg-white shadow-md sticky top-0 z-10">
+    <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-indigo-600 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+      </svg>
+    </a>
+    <div class="container mx-auto px-6">
+      <h1 class="text-3xl font-extrabold text-center text-indigo-700">Neuro Debate AI</h1>
+      <p class="mt-2 text-center text-gray-600">Autonomous Multi-Agent Debate Intelligence System</p>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto px-6 mt-10">
+    <form action="/ai/tool/nuro-debater/start" method="POST" class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-10 rounded-xl shadow-lg space-y-10">
+      <h1 class="text-5xl font-bold text-center mb-6 text-cyan-400 drop-shadow-lg">🤖 AI Debate Arena</h1>
+      <p class="text-center text-gray-400">Where AI minds clash to decide the truth.</p>
+
+      <!-- Debate Topic -->
+      <div class="flex items-center justify-center space-x-4">
+        <input name="motion" class="w-2/3 p-3 rounded-lg text-black" placeholder="Enter debate topic..." value="There needs to be strict laws to regulate LLMs"/>
+      </div>
+
+      <!-- Editable Config Panel -->
+      <div class="bg-gray-800 p-5 rounded-lg mt-6 text-gray-200 space-y-6">
+        <h2 class="text-2xl text-cyan-400 font-bold">🤖 Agents Configuration</h2>
+
+        <div class="grid grid-cols-2 gap-6">
+          <!-- Debater -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-cyan-300 mb-3">🗣️ Debater Agent</h3>
+            <label>Role:</label>
+            <textarea name="debater_role" class="w-full text-black p-2 rounded">A compelling debater</textarea>
+            <label>Goal:</label>
+            <textarea name="debater_goal" class="w-full text-black p-2 rounded">Present a clear argument either in favor of or against the motion. The motion is: {motion}</textarea>
+            <label>Backstory:</label>
+            <textarea name="debater_backstory" class="w-full text-black p-2 rounded">You're an experienced debator with a knack for giving concise but convincing arguments. The motion is: {motion}</textarea>
+            <label>LLM:</label>
+            <input name="debater_llm" value="openai/gpt-4o-mini" class="w-full text-black p-2 rounded"/>
+          </div>
+
+          <!-- Judge -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-cyan-300 mb-3">⚖️ Judge Agent</h3>
+            <label>Role:</label>
+            <textarea name="judge_role" class="w-full text-black p-2 rounded">Decide the winner of the debate based on the arguments presented</textarea>
+            <label>Goal:</label>
+            <textarea name="judge_goal" class="w-full text-black p-2 rounded">Given arguments for and against this motion: {motion}, decide which side is more convincing, based purely on the arguments presented.</textarea>
+            <label>Backstory:</label>
+            <textarea name="judge_backstory" class="w-full text-black p-2 rounded">You are a fair judge with a reputation for weighing up arguments without factoring in your own views, and making a decision based purely on the merits of the argument. The motion is: {motion}</textarea>
+            <label>LLM:</label>
+            <input name="judge_llm" value="openai/gpt-4o-mini" class="w-full text-black p-2 rounded"/>
+          </div>
+        </div>
+
+        <h2 class="text-2xl text-cyan-400 font-bold mt-10">🧩 Tasks Configuration</h2>
+        <div class="grid grid-cols-3 gap-6">
+          <!-- Propose -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-2">🟩 Propose Task</h3>
+            <label>Description:</label>
+            <textarea name="propose_desc" class="w-full text-black p-2 rounded">You are proposing the motion: {motion}. Come up with a clear argument in favor of the motion. Be very convincing.</textarea>
+            <label>Expected Output:</label>
+            <textarea name="propose_output" class="w-full text-black p-2 rounded">Your clear argument in favor of the motion, in a concise manner.</textarea>
+            <label>Agent:</label>
+            <input name="propose_agent" value="debater" class="w-full text-black p-2 rounded"/>
+            <label>Output File:</label>
+            <input name="propose_file" value="output/propose.md" class="w-full text-black p-2 rounded"/>
+          </div>
+
+          <!-- Oppose -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-2">🟥 Oppose Task</h3>
+            <label>Description:</label>
+            <textarea name="oppose_desc" class="w-full text-black p-2 rounded">You are in opposition to the motion: {motion}. Come up with a clear argument against the motion. Be very convincing.</textarea>
+            <label>Expected Output:</label>
+            <textarea name="oppose_output" class="w-full text-black p-2 rounded">Your clear argument against the motion, in a concise manner.</textarea>
+            <label>Agent:</label>
+            <input name="oppose_agent" value="debater" class="w-full text-black p-2 rounded"/>
+            <label>Output File:</label>
+            <input name="oppose_file" value="output/oppose.md" class="w-full text-black p-2 rounded"/>
+          </div>
+
+          <!-- Decide -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-2">⚖️ Decide Task</h3>
+            <label>Description:</label>
+            <textarea name="decide_desc" class="w-full text-black p-2 rounded">Review the arguments presented by the debaters and decide which side is more convincing.</textarea>
+            <label>Expected Output:</label>
+            <textarea name="decide_output" class="w-full text-black p-2 rounded">Your decision on which side is more convincing, and why.</textarea>
+            <label>Agent:</label>
+            <input name="decide_agent" value="judge" class="w-full text-black p-2 rounded"/>
+            <label>Output File:</label>
+            <input name="decide_file" value="output/decide.md" class="w-full text-black p-2 rounded"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" class="bg-cyan-500 px-10 py-3 rounded-lg hover:bg-cyan-400 transition text-lg font-semibold">
+          🚀 Start Debate
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 bg-gray-800 text-center text-white mt-10">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

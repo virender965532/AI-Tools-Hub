@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuro Debate AI - Autonomous Multi-Agent Debate System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-100 via-white to-indigo-100 min-h-screen flex flex-col items-center">
+  <!-- HEADER -->
+  <header class="w-full py-6 bg-white shadow-md sticky top-0 z-10">
+    <!-- Home Icon -->
+    <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-indigo-600 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+      </svg>
+    </a>
+
+    <div class="container mx-auto px-6">
+      <h1 class="text-3xl font-extrabold text-center text-indigo-700">Neuro Debate AI</h1>
+      <p class="mt-2 text-center text-gray-600">Autonomous Multi-Agent Debate Intelligence System</p>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container mx-auto px-6 mt-10">
+
+    <!-- OVERVIEW -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Overview</h2>
+      <p class="text-gray-600 leading-relaxed">
+        <strong>Neuro Debate AI</strong> is a next-generation autonomous debate simulation framework that allows multiple AI agents to engage in structured reasoning battles.
+        The system brings together debater agents that argue for and against a motion, with a judge agent deciding the winner based solely on the arguments' logical strength.
+        It is built using the <strong>CrewAI</strong> framework to orchestrate agent collaboration, role assignment, and debate flow.
+      </p>
+    </section>
+
+    <!-- AI ARCHITECTURE & WORKFLOW -->
+    <section class="bg-gradient-to-br from-indigo-50 via-white to-indigo-50 rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧠 AI Architecture & Workflow</h2>
+      <p class="text-gray-600 mb-4">The architecture employs a structured agent orchestration workflow that mirrors real-world debate logic:</p>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li><strong>Debater (Proposer Agent)</strong> constructs a strong argument <em>in favor</em> of the given motion.</li>
+        <li><strong>Debater (Opposer Agent)</strong> builds a critical counterargument <em>against</em> the motion.</li>
+        <li><strong>Judge Agent</strong> evaluates both sides based purely on reasoning quality, coherence, and persuasiveness.</li>
+        <li><strong>CrewAI Orchestrator</strong> manages communication, data flow, and sequencing between agents.</li>
+      </ul>
+
+      <p class="mt-4 text-gray-600 leading-relaxed">
+        The debate follows a <strong>sequential AI reasoning pipeline</strong>:
+      </p>
+      <ol class="list-decimal pl-6 mt-3 text-gray-700 space-y-2">
+        <li>User submits a motion (topic).</li>
+        <li>Proposer agent generates the supporting argument.</li>
+        <li>Opposer agent generates the counterargument.</li>
+        <li>Judge agent reviews and delivers a verdict.</li>
+        <li>All results are displayed in a live debate chat interface.</li>
+      </ol>
+    </section>
+
+    <!-- DESIGN PATTERNS -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧩 Design Patterns Used</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
+        <div class="p-4 bg-indigo-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Factory Pattern</h3>
+          <p class="text-sm">Used for dynamically creating agents (Debater and Judge) with different personalities and goals.</p>
+        </div>
+        <div class="p-4 bg-blue-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Strategy Pattern</h3>
+          <p class="text-sm">Allows swapping different reasoning strategies or prompt formats for each AI agent.</p>
+        </div>
+        <div class="p-4 bg-yellow-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Chain of Responsibility</h3>
+          <p class="text-sm">Ensures structured debate progression where each agent passes results to the next stage.</p>
+        </div>
+        <div class="p-4 bg-purple-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Observer (Trace) Pattern</h3>
+          <p class="text-sm">Logs and traces each agent’s contribution for transparency and debugging.</p>
+        </div>
+        <div class="p-4 bg-green-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Command Pattern</h3>
+          <p class="text-sm">Encapsulates debate tasks (propose, oppose, decide) into modular, executable commands.</p>
+        </div>
+        <div class="p-4 bg-pink-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Facade Pattern</h3>
+          <p class="text-sm">Provides a single unified entry point to run the debate sequence via the CrewAI orchestrator.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE FUNCTIONALITIES -->
+    <section class="bg-gradient-to-br from-white via-indigo-50 to-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Core Functionalities</h2>
+      <ol class="list-decimal pl-6 space-y-3 text-gray-700">
+        <li>Interactive debate simulation between autonomous AI debaters.</li>
+        <li>Judge-driven evaluation ensuring unbiased verdicts.</li>
+        <li>Dynamic YAML configuration allowing user customization of agent roles and goals.</li>
+        <li>Sequential process management using CrewAI workflow pipelines.</li>
+        <li>Real-time visualization of debate exchanges in a chat-style interface.</li>
+        <li>Extensible architecture for adding new AI personas (e.g., moderator, audience critic).</li>
+      </ol>
+    </section>
+
+    <!-- ADVANCED CONCEPTS -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">🧬 Advanced AI Concepts</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li><strong>LLM Orchestration:</strong> Coordinated reasoning between multiple LLMs using shared context.</li>
+        <li><strong>Prompt Engineering:</strong> Custom role prompts for distinct reasoning styles (logical vs rhetorical).</li>
+        <li><strong>Autonomous Decisioning:</strong> Judge agent executes self-contained verdict logic based on textual coherence.</li>
+        <li><strong>Modular AI Configs:</strong> Editable YAML configuration for runtime personality and goal tuning.</li>
+      </ul>
+    </section>
+
+    <!-- DEMO -->
+    <section class="text-center mb-20">
+      <p class="text-gray-600">💡 Want to try the live demo?</p>
+      <a href="/ai/tool/nuro-debater" class="inline-block mt-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition ease-in-out">Launch the Tool</a>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 bg-gray-800 text-center text-white">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

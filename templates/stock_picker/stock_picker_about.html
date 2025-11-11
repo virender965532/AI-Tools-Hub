@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockCraft AI — CrewAI-powered Industry Stock Picker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    /* subtle 3D accent for hero */
+    .neon { text-shadow: 0 2px 12px rgba(99,102,241,0.15), 0 6px 30px rgba(99,102,241,0.08); }
+  </style>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-100 via-white to-indigo-100 min-h-screen flex flex-col items-center">
+  <!-- HEADER -->
+  <header class="w-full py-6 bg-white shadow-md sticky top-0 z-10">
+    <!-- Home Icon -->
+    <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-indigo-600 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+      </svg>
+    </a>
+
+    <div class="container mx-auto px-6">
+      <h1 class="text-3xl font-extrabold text-center text-indigo-700">StockCraft AI</h1>
+      <p class="mt-2 text-center text-gray-600">CrewAI-powered Industry Stock Picker — reproducible, auditable shortlist generation</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 mt-10">
+
+    <!-- OVERVIEW -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Overview</h2>
+      <p class="text-gray-600 leading-relaxed">StockCraft AI orchestrates specialized agents to translate an industry brief into a ranked shortlist of investable companies. It enforces deterministic steps, caches intermediate artifacts under <code>outputs/</code>, and supports configurable preferences like value/growth/balanced weighting.</p>
+    </section>
+
+    <!-- AI ARCHITECTURE & WORKFLOW -->
+    <section class="bg-gradient-to-br from-indigo-50 via-white to-indigo-50 rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧠 AI Architecture & Workflow</h2>
+      <p class="text-gray-600 mb-4">The system uses CrewAI to assemble a crew of focused agents, each with clear roles and YAML-driven prompts. The pipeline runs sequentially so each artifact is auditable and reusable.</p>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li><strong>Industry Mapper</strong> — creates precise search vocabulary.</li>
+        <li><strong>Company Discovery</strong> — enumerates candidates from primary sources.</li>
+        <li><strong>Fundamental Screener</strong> — collects normalized financials and applies filters.</li>
+        <li><strong>Valuation Analyst</strong> — computes rank-based scores.</li>
+        <li><strong>News & Risk Analyst</strong> — scans headlines for material events.</li>
+        <li><strong>Shortlist Writer</strong> — synthesizes the final picks and Markdown brief.</li>
+      </ul>
+    </section>
+
+    <!-- REASONING PIPELINE -->
+    <section class="bg-gradient-to-br from-indigo-50 via-white to-indigo-50 rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🤖 AI Reasoning Pipeline</h2>
+      <ol class="list-decimal pl-6 mt-3 text-gray-700 space-y-2">
+        <li>User supplies parameters (industry, region, n_picks, min_mcap, valuation_pref).</li>
+        <li>Industry Mapper returns keywords and pitfalls (YAML).</li>
+        <li>Company Discovery returns 20–40 candidate briefs (JSON).</li>
+        <li>Fundamental Screener gathers metrics and filters by market cap.</li>
+        <li>Valuation Analyst ranks candidates by configurable weights.</li>
+        <li>News & Risk Analyst adds recent headlines and sentiment.</li>
+        <li>Shortlist Writer outputs JSON picks and a Markdown brief (outputs/06_shortlist.md).</li>
+      </ol>
+    </section>
+
+    <!-- DESIGN PATTERNS -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧩 Design Patterns</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
+        <div class="p-4 bg-indigo-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Factory & Strategy</h3>
+          <p class="text-sm">Create agents and swap reasoning strategies via YAML.</p>
+        </div>
+        <div class="p-4 bg-blue-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Chain of Responsibility</h3>
+          <p class="text-sm">Sequential, auditable pipeline with strict artifact handoff.</p>
+        </div>
+        <div class="p-4 bg-yellow-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Observer / Trace</h3>
+          <p class="text-sm">Logs and caches help with reproducibility and debugging.</p>
+        </div>
+        <div class="p-4 bg-purple-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Command & Facade</h3>
+          <p class="text-sm">Modular tasks and a single entry point to run the pipeline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE FUNCTIONALITIES -->
+    <section class="bg-gradient-to-br from-white via-indigo-50 to-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Core Functionalities</h2>
+      <ol class="list-decimal pl-6 space-y-3 text-gray-700">
+        <li>Configurable pipeline (value/growth/balanced).</li>
+        <li>YAML-driven agent prompts and auditable outputs.</li>
+        <li>Search + scrape + code-execution toolset for reliable data gathering.</li>
+        <li>Shortlist JSON + Markdown brief with timestamped provenance.</li>
+      </ol>
+    </section>
+
+    <!-- ADVANCED CONCEPTS -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">🧬 Advanced Concepts</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>Rank-based scoring with deterministic NA handling and tie-breakers.</li>
+        <li>Short-term and long-term memory for context reuse.</li>
+        <li>Tool-enabled data lineage: clear source URLs and timestamps.</li>
+      </ul>
+    </section>
+
+    <!-- DEMO -->
+    <section class="text-center mb-20">
+      <p class="text-gray-600">💡 Want to try the live demo?</p>
+      <a href="/ai/tool/stock-picker" class="inline-block mt-4 px-8 py-3 bg-indigo-500 text-white rounded-lg shadow-xl hover:bg-indigo-400">Launch StockCraft Tool</a>
+    </section>
+
+  </main>
+
+  <footer class="w-full py-6 bg-gray-800 text-center text-white">
+    <p>© {{ year }} StockCraft AI · CrewAI project</p>
+  </footer>
+</body>
+</html>

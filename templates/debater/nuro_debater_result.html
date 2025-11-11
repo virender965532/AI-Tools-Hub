@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Debate Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #101020, #050510);
+    }
+    .glow {
+      text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .gradient-propose {
+      background: linear-gradient(135deg, #09203f 0%, #537895 100%);
+    }
+    .gradient-oppose {
+      background: linear-gradient(135deg, #360033 0%, #0b8793 100%);
+    }
+    .gradient-decide {
+      background: linear-gradient(135deg, #004e92 0%, #000428 100%);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-white flex flex-col items-center p-6 overflow-y-auto">
+  <a href="/" class="absolute top-6 left-6 text-indigo-600 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+    </svg>
+  </a>
+    
+  <h1 class="text-3xl md:text-4xl font-semibold mb-8 text-cyan-400 glow text-center">
+    💬 AI Debate: {{ motion }}
+  </h1>
+
+  <div class="chat-container w-full glass rounded-2xl shadow-xl p-6 space-y-6 px-[50px]">
+    {% if conversation.propose %}
+    <div class="flex flex-col items-start">
+      <div class="gradient-propose rounded-2xl p-5 shadow-md max-w-[80%] hover:-translate-y-1 transition-all duration-300">
+        <div class="text-cyan-300 font-semibold uppercase tracking-wider mb-2">
+          💡 Proposer
+        </div>
+        <div class="text-gray-100 leading-relaxed">
+          {{ conversation.propose }}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if conversation.oppose %}
+    <div class="flex flex-col items-end">
+      <div class="gradient-oppose rounded-2xl p-5 shadow-md max-w-[80%] hover:-translate-y-1 transition-all duration-300">
+        <div class="text-cyan-300 font-semibold uppercase tracking-wider mb-2 text-right">
+          ⚔️ Opponent
+        </div>
+        <div class="text-gray-100 leading-relaxed text-right">
+          {{ conversation.oppose }}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if conversation.decide %}
+    <div class="flex flex-col items-center">
+      <div class="gradient-decide rounded-2xl p-6 shadow-lg border border-cyan-500/40 max-w-[90%] text-center hover:scale-[1.02] transition-all duration-300">
+        <div class="text-cyan-300 font-semibold uppercase tracking-wider mb-2">
+          🧠 Judge’s Decision
+        </div>
+        <div class="text-gray-100 leading-relaxed">
+          {{ conversation.decide }}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Submit -->
+      <div class="text-center mt-12">
+        <a href="/ai/tool/nuro-debater" class="bg-cyan-500 px-10 py-3 rounded-lg hover:bg-cyan-400 transition text-lg font-semibold">
+          🚀 Start New Debate
+        </a>
+      </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 bg-gray-800 text-center text-white mt-10">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

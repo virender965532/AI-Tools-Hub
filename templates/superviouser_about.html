@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superviouser AI - Autonomous Email Intelligence System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-blue-100 via-white to-blue-100 min-h-screen flex flex-col items-center">
+  <header class="w-full py-6 bg-white shadow-md sticky top-0 z-10">
+    <!-- Home Icon -->
+  <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-[#1d4ed8] transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+    </svg>
+  </a>
+    <div class="container mx-auto px-6">
+      <h1 class="text-3xl font-extrabold text-center text-blue-700">Superviouser AI</h1>
+      <p class="mt-2 text-center text-gray-600">Autonomous Multi-Agent Email Intelligence System</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 mt-10">
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Overview</h2>
+      <p class="text-gray-600 leading-relaxed">
+        <strong>Superviouser</strong> is an advanced AI-powered agent orchestration system that automates the generation, evaluation,
+        formatting, and delivery of cold sales emails using structured collaboration between multiple specialized AI agents.
+        It leverages OpenAI's multi-agent reasoning framework and Brevo API for transactional email delivery.
+      </p>
+    </section>
+
+    <section class="bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧠 AI Architecture & Workflow</h2>
+      <p class="text-gray-600 mb-4">This system employs a dynamic chain of AI agents working together:</p>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li><strong>Sales Agents</strong> generate email drafts using different styles and tones.</li>
+        <li><strong>Sales Manager Agent</strong> evaluates drafts and selects the best option.</li>
+        <li><strong>Email Manager Agent</strong> formats the selected draft into HTML and prepares it for delivery.</li>
+        <li><strong>Brevo Email Tool</strong> handles the final delivery via the transactional email API.</li>
+      </ul>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🧩 Design Patterns Used</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
+        <div class="p-4 bg-blue-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Factory Pattern</h3>
+          <p class="text-sm">Dynamically creates AI agents with tools and instructions.</p>
+        </div>
+        <div class="p-4 bg-green-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Chain of Responsibility</h3>
+          <p class="text-sm">Passes command across agents in sequence.</p>
+        </div>
+        <div class="p-4 bg-yellow-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Strategy Pattern</h3>
+          <p class="text-sm">Allows swap-in replacement of email generation strategies.</p>
+        </div>
+        <div class="p-4 bg-purple-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Command Pattern</h3>
+          <p class="text-sm">Wraps external tools (e.g., email API) for agent use.</p>
+        </div>
+        <div class="p-4 bg-pink-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Observer Pattern (Trace)</h3>
+          <p class="text-sm">Logs and observes agent activity for inspection.</p>
+        </div>
+        <div class="p-4 bg-red-100 rounded-lg shadow-md">
+          <h3 class="font-semibold">Facade Pattern</h3>
+          <p class="text-sm">High-level function for orchestrating all sub-components.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-gradient-to-br from-white via-blue-50 to-white rounded-lg shadow-lg p-8 mb-10">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Core Functionalities</h2>
+      <ol class="list-decimal pl-6 space-y-3 text-gray-700">
+        <li>Multi-style PDF email generation using AI-driven draft selection.</li>
+        <li>Evaluation of drafts using Sales Manager agent intelligence.</li>
+        <li>Dynamic tool calling and agent handoffs.</li>
+        <li>HTML email formatting and UX-optimized layout.</li>
+        <li>Seamless transactional email dispatch using Brevo API.</li>
+      </ol>
+    </section>
+
+    <section class="text-center mb-20">
+      <p class="text-gray-600">💡 Want to try the live demo?</p>
+      <a href="/ai/tool/superviouser" class="inline-block mt-2 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition ease-in-out">Launch the Tool</a>
+    </section>
+  </main>
+
+  <footer class="w-full py-6 bg-gray-800 text-center text-white">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

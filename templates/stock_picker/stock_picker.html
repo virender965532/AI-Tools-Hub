@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockCraft Tool — Configure & Run</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    textarea { min-height: 80px; }
+    /* Toggle Switch Styling */
+    .toggle-checkbox {
+      appearance: none;
+      width: 48px;
+      height: 24px;
+      background-color: #4b5563;
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    .toggle-checkbox:checked {
+      background-color: #10b981;
+    }
+    .toggle-checkbox:before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: white;
+      top: 2px;
+      left: 2px;
+      transition: left 0.3s;
+    }
+    .toggle-checkbox:checked:before {
+      left: 26px;
+    }
+    /* Collapse/Expand Styling */
+    .section-header {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+    .section-content {
+      max-height: 10000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .section-content.collapsed {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .chevron-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .chevron-icon.collapsed {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-100 via-white to-indigo-100 min-h-screen flex flex-col items-center">
+  <!-- HEADER -->
+  <header class="w-full py-6 bg-white shadow-md sticky top-0 z-10">
+    <a href="/" class="absolute mt-6 ml-6 top-6 left-6 text-indigo-600 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a2 2 0 002 2h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a2 2 0 002-2V9h1a1 1 0 00.707-1.707l-7-7z" />
+      </svg>
+    </a>
+    <div class="container mx-auto px-6">
+      <h1 class="text-3xl font-extrabold text-center text-indigo-700">StockCraft AI</h1>
+      <p class="mt-2 text-center text-gray-600">CrewAI-powered Industry Stock Picker — Reproducible, Auditable Stock Research</p>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto px-6 mt-10">
+    <form action="/ai/tool/stock-picker/start" method="POST" class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-10 rounded-xl shadow-lg space-y-10">
+      <h1 class="text-5xl font-bold text-center mb-6 text-cyan-400 drop-shadow-lg">📊 Stock Picker Arena</h1>
+      <p class="text-center text-gray-400">AI agents discover, screen, and rank companies. You decide the winners.</p>
+
+      <!-- Pipeline Configuration Panel -->
+      <div class="bg-gray-800 p-5 rounded-lg mt-6 text-gray-200 space-y-6">
+        <div class="section-header" onclick="toggleSection('pipeline-content', this)">
+          <h2 class="text-2xl text-cyan-400 font-bold">⚙️ Pipeline Configuration</h2>
+            <span class="chevron-icon">></span>
+        </div>
+
+        <div id="pipeline-content" class="section-content">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Industry & Region -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-cyan-300 mb-3">🔍 Search Parameters</h3>
+            <label class="text-gray-300">Industry (required)</label>
+            <input name="industry" required type="text" class="w-full text-black p-2 rounded mt-1 mb-3" placeholder="e.g., solar energy, fintech, biotech" value="solar energy" />
+
+            <label class="text-gray-300">Region</label>
+            <input name="region" type="text" class="w-full text-black p-2 rounded mt-1" placeholder="e.g., India, US" value="India" />
+          </div>
+
+          <!-- Stock Selection Criteria -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold text-cyan-300 mb-3">💰 Selection Criteria</h3>
+            <label class="text-gray-300">Number of picks</label>
+            <input name="n_picks" type="number" min="1" value="5" class="w-full text-black p-2 rounded mt-1 mb-3" />
+
+            <label class="text-gray-300">Min market cap (USD)</label>
+            <input name="min_mcap" type="number" value="500000000" class="w-full text-black p-2 rounded mt-1" />
+          </div>
+        </div>
+
+        <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+          <h3 class="text-xl font-semibold text-cyan-300 mb-3">⚖️ Valuation Preference</h3>
+          <div class="flex gap-4 flex-wrap">
+            <label class="flex items-center gap-2 text-gray-300">
+              <input name="valuation_pref" type="radio" value="value" class="w-6 h-6"/>
+              <span>Value (low P/E, cheap ratios)</span>
+            </label>
+            <label class="flex items-center gap-2 text-gray-300">
+              <input name="valuation_pref" type="radio" value="balanced" checked class="w-6 h-6"/>
+              <span>Balanced (mix of value + growth)</span>
+            </label>
+            <label class="flex items-center gap-2 text-gray-300">
+              <input name="valuation_pref" type="radio" value="growth" class="w-6 h-6"/>
+              <span>Growth (high revenue CAGR)</span>
+            </label>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Agents Configuration -->
+      <div class="bg-gray-800 p-5 rounded-lg text-gray-200 space-y-6">
+        <div class="section-header" onclick="toggleSection('agents-content', this)">
+          <h2 class="text-2xl text-cyan-400 font-bold">🤖 Agents Configuration</h2>
+            <span class="chevron-icon">></span>
+        </div>
+
+        <div id="agents-content" class="section-content">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Manager Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">👔 Manager</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="manager_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('manager', {}).get('role', 'Portfolio Manager & Orchestrator') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="manager_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('manager', {}).get('goal', 'Own the end‑to‑end research pipeline and deliver a reproducible, ranked shortlist') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="manager_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('manager', {}).get('backstory', 'A disciplined PM who blends value, growth, and quality. Obsessed with process hygiene and decision‑ready outputs.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="manager_allow_delegation" class="toggle-checkbox" {% if agents.get('manager', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="manager_cache" class="toggle-checkbox" {% if agents.get('manager', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="manager_respect_context_window" class="toggle-checkbox" {% if agents.get('manager', {}).get('respect_context_window', true) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="manager_max_iter" type="number" value="{{ agents.get('manager', {}).get('max_iter', 20) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- Industry Mapper Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">🗂️ Industry Mapper</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="industry_mapper_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('industry_mapper', {}).get('role', 'Industry Taxonomy & Scope Analyst') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="industry_mapper_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('industry_mapper', {}).get('goal', 'Translate the input industry into a compact, precise search vocabulary and scope boundaries') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="industry_mapper_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('industry_mapper', {}).get('backstory', 'A taxonomy nerd fluent in GICS/NAICS, synonyms, and evolving industry labels. Excellent at disambiguation.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="industry_mapper_allow_delegation" class="toggle-checkbox" {% if agents.get('industry_mapper', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="industry_mapper_cache" class="toggle-checkbox" {% if agents.get('industry_mapper', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="industry_mapper_respect_context_window" class="toggle-checkbox" {% if agents.get('industry_mapper', {}).get('respect_context_window', false) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="industry_mapper_max_iter" type="number" value="{{ agents.get('industry_mapper', {}).get('max_iter', 12) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- Company Discovery Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">🔎 Company Discovery</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="company_discovery_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('company_discovery_agent', {}).get('role', 'Discovery Researcher (Public Equities)') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="company_discovery_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('company_discovery_agent', {}).get('goal', 'Enumerate public companies with primary exposure to the target industry. Confirm via IR and filings.') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="company_discovery_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('company_discovery_agent', {}).get('backstory', 'A fast, careful web scout who triangulates sources and avoids conglomerate side‑pockets.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="company_discovery_allow_delegation" class="toggle-checkbox" {% if agents.get('company_discovery_agent', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="company_discovery_cache" class="toggle-checkbox" {% if agents.get('company_discovery_agent', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="company_discovery_respect_context_window" class="toggle-checkbox" {% if agents.get('company_discovery_agent', {}).get('respect_context_window', false) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="company_discovery_max_iter" type="number" value="{{ agents.get('company_discovery_agent', {}).get('max_iter', 18) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- Fundamental Screener Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📊 Fundamental Screener</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="fundamental_screener_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('fundamental_screener', {}).get('role', 'Fundamental Data Screener') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="fundamental_screener_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('fundamental_screener', {}).get('goal', 'Collect recent, comparable fundamentals for candidates and apply hard filter market_cap >= min_mcap.') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="fundamental_screener_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('fundamental_screener', {}).get('backstory', 'A pragmatic analyst who prefers consistency. Never fabricates numbers; always timestamps sources.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="fundamental_screener_allow_delegation" class="toggle-checkbox" {% if agents.get('fundamental_screener', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="fundamental_screener_cache" class="toggle-checkbox" {% if agents.get('fundamental_screener', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="fundamental_screener_respect_context_window" class="toggle-checkbox" {% if agents.get('fundamental_screener', {}).get('respect_context_window', true) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="fundamental_screener_max_iter" type="number" value="{{ agents.get('fundamental_screener', {}).get('max_iter', 20) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- Valuation Analyst Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📈 Valuation Analyst</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="valuation_analyst_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('valuation_analyst', {}).get('role', 'Valuation, Quality & Growth Scoring Analyst') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="valuation_analyst_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('valuation_analyst', {}).get('goal', 'Compute transparent, reproducible composite scores aligned to valuation preference.') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="valuation_analyst_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('valuation_analyst', {}).get('backstory', 'A valuation generalist who favors simple, auditable scoring over ornate models. Champions clarity.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="valuation_analyst_allow_delegation" class="toggle-checkbox" {% if agents.get('valuation_analyst', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="valuation_analyst_cache" class="toggle-checkbox" {% if agents.get('valuation_analyst', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="valuation_analyst_respect_context_window" class="toggle-checkbox" {% if agents.get('valuation_analyst', {}).get('respect_context_window', false) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="valuation_analyst_max_iter" type="number" value="{{ agents.get('valuation_analyst', {}).get('max_iter', 18) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- News & Risk Analyst Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📰 News & Risk Analyst</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="news_risk_analyst_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('news_risk_analyst', {}).get('role', 'News, Catalyst & Risk Analyst') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="news_risk_analyst_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('news_risk_analyst', {}).get('goal', 'Scan last 30–90 days of headlines for material catalysts, controversies, and risks.') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="news_risk_analyst_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('news_risk_analyst', {}).get('backstory', 'A cautious, time‑aware reader who prioritizes materiality and pattern‑spotting.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="news_risk_analyst_allow_delegation" class="toggle-checkbox" {% if agents.get('news_risk_analyst', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="news_risk_analyst_cache" class="toggle-checkbox" {% if agents.get('news_risk_analyst', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="news_risk_analyst_respect_context_window" class="toggle-checkbox" {% if agents.get('news_risk_analyst', {}).get('respect_context_window', false) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="news_risk_analyst_max_iter" type="number" value="{{ agents.get('news_risk_analyst', {}).get('max_iter', 16) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+          <!-- Shortlist Writer Agent -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">✍️ Shortlist Writer</h3>
+            
+            <label class="text-gray-300 block mt-2">Role:</label>
+            <input name="shortlist_writer_role" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ agents.get('shortlist_writer', {}).get('role', 'Investment Writer & Editor') }}" />
+
+            <label class="text-gray-300 block mt-2">Goal:</label>
+            <textarea name="shortlist_writer_goal" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('shortlist_writer', {}).get('goal', 'Synthesize research into crisp, ranked shortlist with clear theses, drivers, and red flags.') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Backstory:</label>
+            <textarea name="shortlist_writer_backstory" class="w-full text-black p-2 rounded mt-1 mb-2">{{ agents.get('shortlist_writer', {}).get('backstory', 'A concise communicator who turns analysis into decision‑ready notes while preserving caveats.') }}</textarea>
+
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Allow Delegation:</label>
+                <input type="checkbox" name="shortlist_writer_allow_delegation" class="toggle-checkbox" {% if agents.get('shortlist_writer', {}).get('allow_delegation', false) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-gray-300 text-sm">Cache:</label>
+                <input type="checkbox" name="shortlist_writer_cache" class="toggle-checkbox" {% if agents.get('shortlist_writer', {}).get('cache', true) %}checked{% endif %} />
+              </div>
+              <div class="flex items-center gap-2 ml-[-24px] w-[250px]">
+              <label class="text-gray-300 text-sm">Respect Context Window:</label>
+              <input type="checkbox" name="shortlist_writer_respect_context_window" class="toggle-checkbox" {% if agents.get('shortlist_writer', {}).get('respect_context_window', false) %}checked{% endif %} />
+            </div>
+            </div>
+
+            <label class="text-gray-300 block mt-2">Max Iterations:</label>
+            <input name="shortlist_writer_max_iter" type="number" value="{{ agents.get('shortlist_writer', {}).get('max_iter', 12) }}" class="w-full text-black p-2 rounded mt-1 mb-2" />
+          </div>
+
+        </div>
+        </div>
+      </div>
+
+      <!-- Tasks Configuration -->
+      <div class="bg-gray-800 p-5 rounded-lg text-gray-200 space-y-6">
+        <div class="section-header" onclick="toggleSection('tasks-content', this)">
+          <h2 class="text-2xl text-cyan-400 font-bold">🧩 Tasks Configuration</h2>
+            <span class="chevron-icon">></span>
+        </div>
+
+        <div id="tasks-content" class="section-content">
+        <div class="grid grid-cols-1 gap-6">
+
+          <!-- Map Industry Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">🗺️ Map Industry</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="map_industry_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('map_industry', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="map_industry_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('map_industry', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="map_industry_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('map_industry', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="map_industry_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('map_industry', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="map_industry_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('map_industry', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="map_industry_markdown" class="toggle-checkbox" {% if tasks.get('map_industry', {}).get('markdown', false) %}checked{% endif %} />
+            </div>
+          </div>
+
+          <!-- Company Discovery Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">🔎 Company Discovery</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="company_discovery_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('company_discovery', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="company_discovery_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('company_discovery', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="company_discovery_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('company_discovery', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="company_discovery_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('company_discovery', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="company_discovery_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('company_discovery', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="company_discovery_markdown" class="toggle-checkbox" {% if tasks.get('company_discovery', {}).get('markdown', false) %}checked{% endif %} />
+            </div>
+          </div>
+
+          <!-- Screen Fundamentals Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📊 Screen Fundamentals</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="screen_fundamentals_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('screen_fundamentals', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="screen_fundamentals_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('screen_fundamentals', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="screen_fundamentals_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('screen_fundamentals', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="screen_fundamentals_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('screen_fundamentals', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="screen_fundamentals_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('screen_fundamentals', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="screen_fundamentals_markdown" class="toggle-checkbox" {% if tasks.get('screen_fundamentals', {}).get('markdown', false) %}checked{% endif %} />
+            </div>
+          </div>
+
+          <!-- Valuation Rank Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📈 Valuation Rank</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="valuation_rank_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('valuation_rank', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="valuation_rank_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('valuation_rank', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="valuation_rank_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('valuation_rank', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="valuation_rank_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('valuation_rank', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="valuation_rank_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('valuation_rank', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="valuation_rank_markdown" class="toggle-checkbox" {% if tasks.get('valuation_rank', {}).get('markdown', false) %}checked{% endif %} />
+            </div>
+          </div>
+
+          <!-- News and Risks Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">📰 News & Risks</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="news_and_risks_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('news_and_risks', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="news_and_risks_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('news_and_risks', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="news_and_risks_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('news_and_risks', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="news_and_risks_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('news_and_risks', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="news_and_risks_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('news_and_risks', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="news_and_risks_markdown" class="toggle-checkbox" {% if tasks.get('news_and_risks', {}).get('markdown', false) %}checked{% endif %} />
+            </div>
+          </div>
+
+          <!-- Compile Shortlist Task -->
+          <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+            <h3 class="text-lg font-semibold text-cyan-300 mb-3">✍️ Compile Shortlist</h3>
+            
+            <label class="text-gray-300 block mt-2">Description:</label>
+            <textarea name="compile_shortlist_description" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('compile_shortlist', {}).get('description', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Expected Output:</label>
+            <textarea name="compile_shortlist_expected_output" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('compile_shortlist', {}).get('expected_output', '') }}</textarea>
+
+            <label class="text-gray-300 block mt-2">Agent:</label>
+            <input name="compile_shortlist_agent" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('compile_shortlist', {}).get('agent', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Output File:</label>
+            <input name="compile_shortlist_output_file" type="text" class="w-full text-black p-2 rounded mt-1 mb-2" value="{{ tasks.get('compile_shortlist', {}).get('output_file', '') }}" />
+
+            <label class="text-gray-300 block mt-2">Context:</label>
+            <textarea name="compile_shortlist_context" class="w-full text-black p-2 rounded mt-1 mb-2">{{ tasks.get('compile_shortlist', {}).get('context', []) | join(', ') }}</textarea>
+
+            <div class="flex items-center gap-2 mt-3">
+              <label class="text-gray-300 text-sm">Markdown:</label>
+              <input type="checkbox" name="compile_shortlist_markdown" class="toggle-checkbox" {% if tasks.get('compile_shortlist', {}).get('markdown', true) %}checked{% endif %} />
+            </div>
+          </div>
+
+        </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" class="bg-cyan-500 px-10 py-3 rounded-lg hover:bg-cyan-400 transition text-lg font-semibold">
+          🚀 Start Pipeline
+        </button>
+      </div>
+    </form>
+
+    
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 bg-gray-800 text-center text-white mt-10">
+    <p>© {{ year }} AI Tools by Virender Kumar. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    function toggleSection(sectionId, headerElement) {
+      const content = document.getElementById(sectionId);
+      const chevron = headerElement.querySelector('.chevron-icon');
+      
+      content.classList.toggle('collapsed');
+      chevron.classList.toggle('collapsed');
+    }
+  </script>
+</body>
+</html>
