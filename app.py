@@ -22,7 +22,7 @@ DEBATER_AGENTS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/agents.ya
 DEBATER_TASKS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/tasks.yaml")
 STOCK_AGENTS_FILE = os.path.join(BASE_DIR, "stock_picker_advance", "src", "stock_picker", "config", "agents.yaml")
 STOCK_TASKS_FILE = os.path.join(BASE_DIR, "stock_picker_advance", "src", "stock_picker", "config", "tasks.yaml")
-STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "stock_picker_advance", "outputs")
+STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "outputs")
 
 
 # === ROUTES ===
