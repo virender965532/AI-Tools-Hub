@@ -1,130 +1,76 @@
 {
   "root": [
     {
-      "ticker": "HSBC",
-      "name": "HSBC Holdings plc",
-      "rel_valuation_score": 13.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "BNP",
-      "name": "BNP Paribas S.A.",
-      "rel_valuation_score": 13.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "TD",
-      "name": "Toronto-Dominion Bank",
-      "rel_valuation_score": 12.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
+      "ticker": "PNB",
+      "name": "Punjab National Bank",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 1.0,
+      "quality_score": 4.0,
+      "growth_score": 0.0
     },
     {
       "ticker": "SBI",
       "name": "State Bank of India",
-      "rel_valuation_score": 12.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "DB",
-      "name": "Deutsche Bank AG",
-      "rel_valuation_score": 11.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "C",
-      "name": "Citigroup Inc.",
-      "rel_valuation_score": 10.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "BAC",
-      "name": "Bank of America Corporation",
-      "rel_valuation_score": 10.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "rel_valuation_score": 9.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "BMO",
-      "name": "Bank of Montreal",
-      "rel_valuation_score": 9.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "WFC",
-      "name": "Wells Fargo & Company",
-      "rel_valuation_score": 11.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
-    },
-    {
-      "ticker": "ICICI",
-      "name": "ICICI Bank Limited",
-      "rel_valuation_score": 8.0,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 2.0,
+      "quality_score": 3.0,
+      "growth_score": 0.0
     },
     {
       "ticker": "HDFC",
       "name": "HDFC Bank Limited",
-      "rel_valuation_score": 7.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 7.0,
+      "quality_score": 1.0,
+      "growth_score": 0.0
     },
     {
-      "ticker": "UBS",
-      "name": "UBS Group AG",
-      "rel_valuation_score": 8.5,
-      "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
+      "ticker": "ICICI",
+      "name": "ICICI Bank Limited",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 6.0,
+      "quality_score": 0.0,
+      "growth_score": 0.0
     },
     {
-      "ticker": "TD",
-      "name": "Toronto-Dominion Bank",
-      "rel_valuation_score": 9.49,
+      "ticker": "KOTAK",
+      "name": "Kotak Mahindra Bank",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 8.0,
+      "quality_score": 2.0,
+      "growth_score": 0.0
+    },
+    {
+      "ticker": "BANDHAN",
+      "name": "Bandhan Bank Limited",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 5.0,
+      "quality_score": 7.0,
+      "growth_score": 0.0
+    },
+    {
+      "ticker": "AXIS",
+      "name": "Axis Bank Limited",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": 4.0,
+      "quality_score": 1.0,
+      "growth_score": 0.0
+    },
+    {
+      "ticker": "INDUSIND",
+      "name": "IndusInd Bank Limited",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": null,
       "quality_score": null,
-      "growth_score": 0,
-      "final_score": null,
-      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs."
+      "growth_score": null
+    },
+    {
+      "ticker": "YES",
+      "name": "YES Bank Limited",
+      "intrinsic_estimate_note": "Ranks computed using neutral ranks for NAs.",
+      "rel_valuation_score": null,
+      "quality_score": null,
+      "growth_score": null
     }
   ]
 }

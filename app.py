@@ -4,10 +4,15 @@ from dotenv import load_dotenv
 from datetime import datetime
 from debate.src.debate.crew import Debate
 from superviouser import superviouser_agentic_handoff
-# from stock_picker.crew import StockPickerCrew
+# The package directory contains a hyphen so it cannot be imported as a normal module name.
+# We'll lazily load the StockPickerCrew class at runtime from the file path.
+import importlib.util
+StockPickerCrew = None
 import os
 import yaml
+import json
 import asyncio
+import threading
 
 load_dotenv()
 app = Flask(__name__)
@@ -19,6 +24,7 @@ DEBATER_AGENTS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/agents.ya
 DEBATER_TASKS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/tasks.yaml")
 STOCK_AGENTS_FILE = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "config", "agents.yaml")
 STOCK_TASKS_FILE = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "config", "tasks.yaml")
+STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "stock-picker-advance", "outputs")
 
 
 # === ROUTES ===
@@ -322,48 +328,216 @@ def stock_picker():
         agents_data = {}
         tasks_data = {}
 
+    # Load output files for Previous Outputs section
+    outputs_data = {}
+    
+    # 1. Industry Mapping (YAML)
+    try:
+        industry_mapping_file = os.path.join(STOCK_OUTPUTS_DIR, "01_industry_mapping.yaml")
+        # Robust YAML loader: try safe_load, then try simple normalization and fallbacks
+        def load_yaml_resilient(path):
+            import re, ast
+            txt = open(path, "r", encoding="utf-8").read()
+            try:
+                return yaml.safe_load(txt) or {}
+            except Exception:
+                # Try removing accidental leading indentation on mapping keys
+                try:
+                    normalized = re.sub(r'^\s+(?=[A-Za-z0-9_\-]+:)', '', txt, flags=re.M)
+                    return yaml.safe_load(normalized) or {}
+                except Exception:
+                    pass
+                # Try extracting JSON-like block
+                m = re.search(r'(\{[\s\S]*\}|\[[\s\S]*\])', txt)
+                if m:
+                    try:
+                        return json.loads(m.group(1)) or {}
+                    except Exception:
+                        pass
+                # Last resort: very simple key: value parser (handles lists and strings)
+                result = {}
+                for line in txt.splitlines():
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    if ':' not in line:
+                        continue
+                    k, v = line.split(':', 1)
+                    k = k.strip()
+                    v = v.strip()
+                    # try to parse v as Python literal (list / string)
+                    try:
+                        parsed = ast.literal_eval(v)
+                    except Exception:
+                        # remove surrounding quotes if any
+                        if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
+                            parsed = v[1:-1]
+                        else:
+                            parsed = v
+                    result[k] = parsed
+                return result
+
+        outputs_data["industry_mapping"] = load_yaml_resilient(industry_mapping_file) or {}
+    except Exception:
+        outputs_data["industry_mapping"] = {}
+
+    # 2. Candidates (JSON)
+    try:
+        candidates_file = os.path.join(STOCK_OUTPUTS_DIR, "02_candidates.json")
+        with open(candidates_file, "r", encoding="utf-8") as f:
+            candidates_raw = json.load(f)
+        if isinstance(candidates_raw, list):
+            outputs_data["candidates"] = candidates_raw
+        elif isinstance(candidates_raw, dict):
+            outputs_data["candidates"] = candidates_raw.get("root", candidates_raw.get("candidates", []))
+        else:
+            outputs_data["candidates"] = []
+    except Exception:
+        outputs_data["candidates"] = []
+
+    # 3. Screened Metrics (JSON)
+    try:
+        screened_metrics_file = os.path.join(STOCK_OUTPUTS_DIR, "03_screened_metrics.json")
+        with open(screened_metrics_file, "r", encoding="utf-8") as f:
+            try:
+                metrics_raw = json.load(f)
+            except Exception:
+                # fallback: extract JSON block from text
+                f.seek(0)
+                txt = f.read()
+                import re
+                m = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", txt)
+                if m:
+                    try:
+                        metrics_raw = json.loads(m.group(1))
+                    except Exception:
+                        metrics_raw = None
+                else:
+                    metrics_raw = None
+        if isinstance(metrics_raw, list):
+            outputs_data["screened_metrics"] = metrics_raw
+        elif isinstance(metrics_raw, dict):
+            outputs_data["screened_metrics"] = metrics_raw.get("root", metrics_raw.get("screened_metrics", []))
+        else:
+            outputs_data["screened_metrics"] = []
+    except Exception:
+        outputs_data["screened_metrics"] = []
+
+    # 4. Valuation Rank (JSON)
+    try:
+        valuation_rank_file = os.path.join(STOCK_OUTPUTS_DIR, "04_valuation_rank.json")
+        with open(valuation_rank_file, "r", encoding="utf-8") as f:
+            valuation_raw = json.load(f)
+        if isinstance(valuation_raw, list):
+            outputs_data["valuation_rank"] = valuation_raw
+        elif isinstance(valuation_raw, dict):
+            outputs_data["valuation_rank"] = valuation_raw.get("root", valuation_raw.get("valuation_rank", []))
+        else:
+            outputs_data["valuation_rank"] = []
+    except Exception:
+        outputs_data["valuation_rank"] = []
+
+    # 5. News & Risks (JSON)
+    try:
+        news_risks_file = os.path.join(STOCK_OUTPUTS_DIR, "05_news_risks.json")
+        with open(news_risks_file, "r", encoding="utf-8") as f:
+            try:
+                news_raw = json.load(f)
+            except Exception:
+                f.seek(0)
+                txt = f.read()
+                import re
+                m = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", txt)
+                if m:
+                    try:
+                        news_raw = json.loads(m.group(1))
+                    except Exception:
+                        news_raw = None
+                else:
+                    news_raw = None
+        if isinstance(news_raw, list):
+            outputs_data["news_risks"] = news_raw
+        elif isinstance(news_raw, dict):
+            outputs_data["news_risks"] = news_raw.get("root", news_raw.get("news_risks", []))
+        else:
+            outputs_data["news_risks"] = []
+    except Exception:
+        outputs_data["news_risks"] = []
+
+    # 6. Shortlist (Markdown - parse as JSON)
+    try:
+        shortlist_file = os.path.join(STOCK_OUTPUTS_DIR, "06_shortlist.md")
+        with open(shortlist_file, "r", encoding="utf-8") as f:
+            shortlist_content = f.read()
+            # Extract JSON from markdown
+            import re
+            json_match = re.search(r'\{[\s\S]*\}', shortlist_content)
+            if json_match:
+                shortlist_json = json.loads(json_match.group())
+                outputs_data["shortlist"] = shortlist_json.get("picks", [])
+            else:
+                outputs_data["shortlist"] = []
+    except Exception:
+        outputs_data["shortlist"] = []
+
     return render_template(
         "stock_picker/stock_picker.html",
         year=current_year,
         agents=agents_data,
         tasks=tasks_data,
+        outputs=outputs_data,
         result=None,
     )
 
 
-# @app.route("/ai/tool/stock-picker/start", methods=["POST"])
-# def start_stock_picker():
-#     form = request.form
-#     industry = form.get("industry", "").strip()
-#     region = form.get("region", "global").strip() or "global"
-#     n_picks = int(form.get("n_picks") or 5)
-#     try:
-#         min_mcap = int(form.get("min_mcap") or 500000000)
-#     except Exception:
-#         min_mcap = 500000000
-#     valuation_pref = form.get("valuation_pref") or "balanced"
+@app.route("/ai/tool/stock-picker/start", methods=["POST"])
+def start_stock_picker():
+    form = request.form
+    industry = form.get("industry", "").strip()
+    region = form.get("region", "India").strip() or "India"
+    n_picks = int(form.get("n_picks") or 5)
+    try:
+        min_mcap = int(form.get("min_mcap") or 500000000)
+    except Exception:
+        min_mcap = 500000000
+    valuation_pref = form.get("valuation_pref") or "balanced"
 
-#     if not industry:
-#         flash("Industry is required.", "danger")
-#         return redirect(url_for("stock_picker"))
+    if not industry:
+        def run_crew_background():
+            """Run crew in background thread"""
+            try:
+                # Lazy-load StockPickerCrew from the local file because the directory name contains a hyphen.
+                global StockPickerCrew
+                if StockPickerCrew is None:
+                    crew_path = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "crew.py")
+                    spec = importlib.util.spec_from_file_location("stock_picker_crew_module", crew_path)
+                    crew_mod = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(crew_mod)
+                    StockPickerCrew = getattr(crew_mod, "StockPickerCrew")
 
-#     try:
-#         crew = StockPickerCrew().crew()
-#         inputs = {
-#             "industry": industry,
-#             "region": region,
-#             "n_picks": n_picks,
-#             "min_mcap": min_mcap,
-#             "valuation_pref": valuation_pref,
-#         }
+                crew = StockPickerCrew().crew()
+                inputs = {
+                    "industry": industry,
+                    "region": region,
+                    "n_picks": n_picks,
+                    "min_mcap": min_mcap,
+                    "valuation_pref": valuation_pref,
+                }
+                result = crew.kickoff(inputs=inputs)
+                print(f"✅ Stock Picker Crew Completed for {industry}")
+            except Exception as e:
+                print(f"❌ Stock Picker Crew Failed: {e}")
+                print(f"✅ Stock Picker Crew Completed for {industry}")
+            except Exception as e:
+                print(f"❌ Stock Picker Crew Failed: {e}")
 
-#         result = crew.kickoff(inputs=inputs)
-#         # render template with result
-#         return render_template("stock_picker/stock_picker.html", year=datetime.now().year, agents_yaml=None, tasks_yaml=None, result=str(result))
+    # Start crew in background thread
+    thread = threading.Thread(target=run_crew_background, daemon=True)
+    thread.start()
 
-#     except Exception as e:
-#         flash(f"Failed to run StockPicker crew: {e}", "danger")
-#         return redirect(url_for("stock_picker"))
+    # Redirect immediately
+    flash(f"Stock picker analysis started for {industry}. Results will be available shortly.", "info")
+    return redirect(url_for("stock_picker"))
 
 
 # === Fallback Tool Page ===

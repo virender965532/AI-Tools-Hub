@@ -17,12 +17,13 @@ map_industry:
 company_discovery:
   description: >
     Using the mapping and web tools, list 20–40 public companies primarily in {industry}
-    (apply {region} if provided). Rules:
-    - Favor primary exposure; exclude diversified names where {industry} is incidental/minor.
-    - Prefer official sources (IR sites, 10‑K/20‑F, 6‑K) for confirmation; use encyclopedic sites only
-      as secondary cross‑checks.
-    - Normalize: ticker UPPERCASE; include exchange if known; de‑duplicate strictly by ticker.
-    - Provide a succinct reason (<=140 chars) for the industry match.
+     operating **in India**. Enforce that all companies:
+    - Are **headquartered in India** OR **listed on Indian exchanges** (e.g., NSE, BSE).
+    - Exclude global companies with only minor Indian exposure.
+    - Prefer official sources (IR sites, 10-K/20-F, 6-K) for confirmation; use encyclopedic sites only
+      as secondary cross-checks.
+    - Normalize: ticker UPPERCASE; include exchange if known (e.g., NSE, BSE); de-duplicate strictly by ticker.
+    - Provide a succinct reason (<=140 chars) for the industry match and mention if the exchange is Indian.
   expected_output: >
     Return ONLY a JSON array (no prose). Each object fields:
       ticker (str, UPPERCASE), name (str), exchange (str, optional), country (str, optional),

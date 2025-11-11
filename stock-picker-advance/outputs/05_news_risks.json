@@ -1,97 +1,67 @@
-```
 {
   "root": [
     {
-      "ticker": "JPM",
-      "headline": "JPMorgan Chase reported strong results in Q3 2025, net income of $14.4 billion, driven by an increase in investment banking fees.",
-      "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2025/3rd-quarter/f24f154c-2653-4da3-b1b0-185586086d50.pdf",
-      "sentiment": "positive",
-      "risk_note": "Continued regulatory scrutiny in the banking sector."
-    },
-    {
-      "ticker": "BAC",
-      "headline": "Bank of America reported a third-quarter profit of $8.5 billion, driven by an increase in investment banking activity.",
-      "url": "https://investor.bankofamerica.com/quarterly-earnings",
-      "sentiment": "positive",
-      "risk_note": "Market volatility may affect future earnings."
-    },
-    {
-      "ticker": "C",
-      "headline": "Citigroup's Q3 earnings rose 16%, with a total profit of $3.8 billion, despite facing a loss from the Banamex sale.",
-      "url": "https://www.reuters.com/business/finance/citigroup-profit-climbs-record-revenue-while-mexico-sale-drags-2025-10-14/",
-      "sentiment": "neutral",
-      "risk_note": "Loss from the Banamex sale raises concerns on ongoing performance."
-    },
-    {
-      "ticker": "WFC",
-      "headline": "Wells Fargo reported a profit of $6 billion in Q3 2025, benefiting from interest rate increases.",
-      "url": "https://www.reuters.com/business/finance/wells-fargo-profit-rises-higher-interest-income-2025-10-14/",
-      "sentiment": "positive",
-      "risk_note": "Regulatory scrutiny from past misconduct remains a concern."
-    },
-    {
-      "ticker": "HSBC",
-      "headline": "HSBC reported a 14% drop in Q3 pre-tax profit, adversely affected by legal issues and reduced deal fees.",
-      "url": "https://sg.finance.yahoo.com/news/hsbc-profit-falls-third-quarter-062524709.html",
+      "ticker": "PNB",
+      "headline": "Punjab National Bank expects $1 billion hit in transition to new credit rules",
+      "url": "https://www.business-standard.com/finance/news/pnb-expects-1-billion-hit-in-transition-to-new-credit-rules-says-ceo-125102000557_1.html",
       "sentiment": "negative",
-      "risk_note": "Increasing legal costs and dropping M&A fees pose risks."
-    },
-    {
-      "ticker": "DB",
-      "headline": "Deutsche Bank exceeded profit estimates in Q3 2025, with a 7% increase in profit driven by strong trading performance.",
-      "url": "https://www.reuters.com/business/finance/deutsche-bank-posts-surprise-rise-quarterly-profit-2025-10-29/",
-      "sentiment": "positive",
-      "risk_note": "Regulatory environment remains demanding for European banks."
-    },
-    {
-      "ticker": "BNP",
-      "headline": "BNP Paribas missed Q3 profit expectations, reporting 3.04 billion euros, hindered by rising bad loans.",
-      "url": "https://www.reuters.com/business/finance/bnp-paribas-misses-forecasts-axa-costs-bad-loans-weigh-2025-10-28/",
-      "sentiment": "negative",
-      "risk_note": "Increased provisions for bad debts may affect future earnings."
-    },
-    {
-      "ticker": "BMO",
-      "headline": "Bank of Montreal raised its quarterly dividend after reporting a record profit of $2.4 billion for Q3.",
-      "url": "https://www.bmo.com/main/about-bmo/banking/investor-relations/financial-information",
-      "sentiment": "positive",
-      "risk_note": "Increased regulatory scrutiny in Canadian markets."
-    },
-    {
-      "ticker": "TD",
-      "headline": "Toronto-Dominion Bank set a new target for Return on Tangible Common Equity between 17% to 18% after reporting a profit in Q3.",
-      "url": "https://www.td.com/ca/en/about-td/for-investors/investor-relations",
-      "sentiment": "positive",
-      "risk_note": "Regulatory issues with U.S. operations could pose risks."
-    },
-    {
-      "ticker": "ICICI",
-      "headline": "ICICI Bank reported a net profit of ₹12,358.89 crore for Q2 2025, supported by strong loan growth.",
-      "url": "https://www.tipranks.com/news/company-announcements/icici-bank-reports-strong-q2-profits-and-announces-board-changes",
-      "sentiment": "positive",
-      "risk_note": "Increasing competition in Indian banking markets."
-    },
-    {
-      "ticker": "HDFC",
-      "headline": "HDFC Bank's net profit of ₹19,610.67 crore marked a significant increase, driven by strong loan growth.",
-      "url": "https://www.hdfcbank.com/personal/about-us/investor-relations/financial-results",
-      "sentiment": "positive",
-      "risk_note": "Regulatory challenges in India's banking sector."
+      "risk_note": "Transition to new regulations could impact profitability."
     },
     {
       "ticker": "SBI",
-      "headline": "SBI reported strong quarterly results with significant profit driven by retail banking performance amid rising interest rates.",
-      "url": "https://www.sbi.co.in/web/home/footer/investors",
+      "headline": "State Bank of India records net profit of $9.2 billion for FY2025",
+      "url": "https://www.facebook.com/EconomicTimes/posts/-state-bank-of-india-sbi-has-undergone-a-remarkable-turnaround-from-being-in-los/1303796551776250/",
       "sentiment": "positive",
-      "risk_note": "Market volatility may affect retail banking performance."
+      "risk_note": "Strong profitability amidst challenging market conditions."
     },
     {
-      "ticker": "UBS",
-      "headline": "UBS's profits and revenues rose, but regulatory challenges and market conditions remain to be navigated.",
-      "url": "https://www.ubs.com/global/en/investor-relations.html",
-      "sentiment": "neutral",
-      "risk_note": "Market fluctuations can impact future earnings."
+      "ticker": "HDFC",
+      "headline": "HDFC Bank limits banker bonuses amid Credit Suisse bond probe",
+      "url": "https://www.livemint.com/market/market-stats/stocks-hdfc-bank-share-price-nse-bse-s0003020",
+      "sentiment": "negative",
+      "risk_note": "Concerns over compliance and internal controls."
+    },
+    {
+      "ticker": "ICICI",
+      "headline": "ICICI Bank's mAB requirements rollback improves customer acquisition",
+      "url": "https://www.ndtv.com/topic/icici-bank",
+      "sentiment": "positive",
+      "risk_note": "Strategic change may enhance competitiveness in urban markets."
+    },
+    {
+      "ticker": "KOTAK",
+      "headline": "Kotak Mahindra Bank misses quarterly profit estimates",
+      "url": "https://www.reuters.com/world/india/indias-kotak-mahindra-bank-misses-quarterly-profit-estimates-higher-provisions-2025-10-25/",
+      "sentiment": "negative",
+      "risk_note": "Increased provisioning affecting short-term profitability."
+    },
+    {
+      "ticker": "BANDHAN",
+      "headline": "Bandhan Bank reports 88% YoY drop in Q2 net profit",
+      "url": "https://scanx.trade/stock-market-news/earnings/bandhan-bank-reports-88-drop-in-q2-net-profit-amid-portfolio-realignment/23369510",
+      "sentiment": "negative",
+      "risk_note": "Significant profit decline raises concerns over operational stability."
+    },
+    {
+      "ticker": "AXIS",
+      "headline": "Axis Bank Q3 profits grow, driven by strong loan demand",
+      "url": "https://economictimes.indiatimes.com/axis-bank-ltd/stocksupdate/companyid-9175.cms",
+      "sentiment": "positive",
+      "risk_note": "Demand for loans boosting revenues."
+    },
+    {
+      "ticker": "INDUSIND",
+      "headline": "IndusInd Bank reports Q2 net loss of ₹437 crore",
+      "url": "https://finance.yahoo.com/quote/INDUSINDBK.NS/news/",
+      "sentiment": "negative",
+      "risk_note": "Reversal in fortune raises concerns for investors."
+    },
+    {
+      "ticker": "YES",
+      "headline": "YES Bank sees ratings upgrades after strategic investment",
+      "url": "https://www.moneycontrol.com/news/tags/yes-bank.html",
+      "sentiment": "positive",
+      "risk_note": "Investment strengthens bank's financial structure."
     }
   ]
 }
-```

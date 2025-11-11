@@ -88,12 +88,12 @@
 
       <!-- Pipeline Configuration Panel -->
       <div class="bg-gray-800 p-5 rounded-lg mt-6 text-gray-200 space-y-6">
-        <div class="section-header" onclick="toggleSection('pipeline-content', this)">
+        <div class="section-header collapsed" onclick="toggleSection('pipeline-content', this)">
           <h2 class="text-2xl text-cyan-400 font-bold">⚙️ Pipeline Configuration</h2>
             <span class="chevron-icon">></span>
         </div>
 
-        <div id="pipeline-content" class="section-content">
+        <div id="pipeline-content" class="section-content collapsed">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Industry & Region -->
           <div class="bg-gray-900 p-5 rounded-xl shadow-md">
@@ -116,7 +116,7 @@
           </div>
         </div>
 
-        <div class="bg-gray-900 p-5 rounded-xl shadow-md">
+        <div class="bg-gray-900 p-5 rounded-xl shadow-md mt-6">
           <h3 class="text-xl font-semibold text-cyan-300 mb-3">⚖️ Valuation Preference</h3>
           <div class="flex gap-4 flex-wrap">
             <label class="flex items-center gap-2 text-gray-300">
@@ -138,12 +138,12 @@
 
       <!-- Agents Configuration -->
       <div class="bg-gray-800 p-5 rounded-lg text-gray-200 space-y-6">
-        <div class="section-header" onclick="toggleSection('agents-content', this)">
+        <div class="section-header collapsed" onclick="toggleSection('agents-content', this)">
           <h2 class="text-2xl text-cyan-400 font-bold">🤖 Agents Configuration</h2>
             <span class="chevron-icon">></span>
         </div>
 
-        <div id="agents-content" class="section-content">
+        <div id="agents-content" class="section-content collapsed">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           <!-- Manager Agent -->
@@ -376,12 +376,12 @@
 
       <!-- Tasks Configuration -->
       <div class="bg-gray-800 p-5 rounded-lg text-gray-200 space-y-6">
-        <div class="section-header" onclick="toggleSection('tasks-content', this)">
+        <div class="section-header collapsed" onclick="toggleSection('tasks-content', this)">
           <h2 class="text-2xl text-cyan-400 font-bold">🧩 Tasks Configuration</h2>
             <span class="chevron-icon">></span>
         </div>
 
-        <div id="tasks-content" class="section-content">
+        <div id="tasks-content" class="section-content collapsed">
         <div class="grid grid-cols-1 gap-6">
 
           <!-- Map Industry Task -->
@@ -545,6 +545,342 @@
         </button>
       </div>
     </form>
+
+    <!-- Previous Outputs Section -->
+    <div class="bg-gray-800 p-6 rounded-lg text-gray-200 space-y-6 mt-8">
+      <div class="section-header cursor-pointer" onclick="toggleSection('previous-outputs-content', this)">
+        <h2 class="text-2xl font-bold text-cyan-400 inline-block">📊 Previous Outputs</h2>
+        <span class="chevron-icon" style="display: inline-block; margin-left: 10px; font-size: 1.2em; transition: transform 0.3s ease;">></span>
+      </div>
+
+      <div id="previous-outputs-content" class="section-content space-y-6">
+
+        <!-- 1. Industry Mapping Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('industry-mapping-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">🏭 Industry Mapping</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="industry-mapping-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.industry_mapping %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      <th class="border border-gray-600 p-2 font-bold">Field</th>
+                      <th class="border border-gray-600 p-2 font-bold">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                        {% for key, value in outputs.industry_mapping.items() %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        <td class="border border-gray-600 p-2 font-semibold text-cyan-300">{{ key }}</td>
+                        <td class="border border-gray-600 p-2">
+                          {% if value is string %}
+                            {% if value.startswith('http') %}
+                              <a href="{{ value }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ value }}</a>
+                            {% else %}
+                              {{ value }}
+                            {% endif %}
+                          {% elif value is iterable and value is not string %}
+                            {% for v in value %}
+                              {% if v is string and v.startswith('http') %}
+                                <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                              {% else %}
+                                {{ v }}{% if not loop.last %}, {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          {% else %}
+                            {{ value }}
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 2. Candidates Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('candidates-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">🎯 Candidates</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="candidates-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.candidates %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      {% set first_row = outputs.candidates[0] %}
+                      {% for key in first_row.keys() %}
+                        <th class="border border-gray-600 p-2 font-bold">{{ key }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in outputs.candidates %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        {% for key in item.keys() %}
+                          <td class="border border-gray-600 p-2 text-gray-200">
+                            {% set val = item[key] %}
+                            {% if val is string %}
+                              {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ val }}</a>
+                              {% else %}
+                                {{ val }}
+                              {% endif %}
+                            {% elif val is iterable and val is not string %}
+                              {% for v in val %}
+                                {% if v is string and v.startswith('http') %}
+                                  <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                  {{ v }}{% if not loop.last %}, {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                              {{ val }}
+                            {% endif %}
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 3. Screened Metrics Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('screened-metrics-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">📊 Screened Metrics</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="screened-metrics-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.screened_metrics %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      {% set first_row = outputs.screened_metrics[0] %}
+                      {% for key in first_row.keys() %}
+                        <th class="border border-gray-600 p-2 font-bold">{{ key }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in outputs.screened_metrics %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        {% for key in item.keys() %}
+                          <td class="border border-gray-600 p-2 text-gray-200">
+                            {% set val = item[key] %}
+                            {% if val is number %}
+                              {{ "%.2f"|format(val) if val % 1 != 0 else val }}
+                            {% elif val is string %}
+                              {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ val }}</a>
+                              {% else %}
+                                {{ val }}
+                              {% endif %}
+                            {% elif val is iterable and val is not string %}
+                              {% for v in val %}
+                                {% if v is string and v.startswith('http') %}
+                                  <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                  {{ v }}{% if not loop.last %}, {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                              {{ val }}
+                            {% endif %}
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 4. Valuation Rank Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('valuation-rank-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">⭐ Valuation Rank</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="valuation-rank-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.valuation_rank %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      {% set first_row = outputs.valuation_rank[0] %}
+                      {% for key in first_row.keys() %}
+                        <th class="border border-gray-600 p-2 font-bold">{{ key }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in outputs.valuation_rank %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        {% for key in item.keys() %}
+                          <td class="border border-gray-600 p-2 text-gray-200">
+                            {% set val = item[key] %}
+                            {% if val is number %}
+                              {{ "%.2f"|format(val) if val % 1 != 0 else val }}
+                            {% elif val is string %}
+                              {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ val }}</a>
+                              {% else %}
+                                {{ val }}
+                              {% endif %}
+                            {% elif val is iterable and val is not string %}
+                              {% for v in val %}
+                                {% if v is string and v.startswith('http') %}
+                                  <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                  {{ v }}{% if not loop.last %}, {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                              {{ val }}
+                            {% endif %}
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 5. News & Risks Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('news-risks-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">📰 News & Risks</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="news-risks-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.news_risks %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      {% set first_row = outputs.news_risks[0] %}
+                      {% for key in first_row.keys() %}
+                        <th class="border border-gray-600 p-2 font-bold">{{ key }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in outputs.news_risks %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        {% for key in item.keys() %}
+                          <td class="border border-gray-600 p-2 text-gray-200">
+                            {% set val = item[key] %}
+                            {% if val is string %}
+                              {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ val }}</a>
+                              {% else %}
+                                {{ val }}
+                              {% endif %}
+                            {% elif val is iterable and val is not string %}
+                              {% for v in val %}
+                                {% if v is string and v.startswith('http') %}
+                                  <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                  {{ v }}{% if not loop.last %}, {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                              {{ val }}
+                            {% endif %}
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 6. Shortlist Output -->
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <div class="section-header cursor-pointer" onclick="toggleSection('shortlist-table', this)" style="padding: 0; margin-bottom: 1rem;">
+            <h3 class="text-lg font-semibold text-cyan-300 inline-block">✅ Shortlist</h3>
+            <span class="chevron-icon" style="display: inline-block; margin-left: 10px; transition: transform 0.3s ease;">></span>
+          </div>
+          <div id="shortlist-table" class="section-content collapsed" style="padding-top: 1rem;">
+            {% if outputs.shortlist %}
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="bg-cyan-600 text-black">
+                      {% set first_row = outputs.shortlist[0] %}
+                      {% for key in first_row.keys() %}
+                        <th class="border border-gray-600 p-2 font-bold">{{ key }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in outputs.shortlist %}
+                      <tr class="bg-gray-800 hover:bg-gray-700 transition">
+                        {% for key in item.keys() %}
+                          <td class="border border-gray-600 p-2 text-gray-200">
+                            {% set val = item[key] %}
+                            {% if val is string %}
+                              {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ val }}</a>
+                              {% else %}
+                                {{ val }}
+                              {% endif %}
+                            {% elif val is iterable and val is not string %}
+                              {% for v in val %}
+                                {% if v is string and v.startswith('http') %}
+                                  <a href="{{ v }}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:underline">{{ v }}</a>{% if not loop.last %}, {% endif %}
+                                {% else %}
+                                  {{ v }}{% if not loop.last %}, {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% else %}
+                              {{ val }}
+                            {% endif %}
+                          </td>
+                        {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-gray-400 italic">No data available</p>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     
   </main>
