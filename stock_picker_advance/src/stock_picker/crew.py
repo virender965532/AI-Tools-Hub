@@ -35,9 +35,6 @@ function_llm = LLM(model="gpt-4o-mini")
 # Uses OpenAI embeddings by default; relies on `OPENAI_API_KEY` in environment.
 EMBEDDER_CONFIG = {
     "provider": "openai",
-    "config": {
-        "model": "text-embedding-3-small",
-    },
 }
 
 

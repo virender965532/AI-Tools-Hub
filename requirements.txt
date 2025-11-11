@@ -8,3 +8,5 @@ pydantic
 uv
 crewai-sdk
 crewai
+crewai-tools
+qdrant-client

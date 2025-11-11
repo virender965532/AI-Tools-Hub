@@ -3,7 +3,7 @@ requires = ["hatchling>=1.18"]
 build-backend = "hatchling.build"
 
 [project]
-name = "stock-picker-crewai"
+name = "stock_picker_crewai"
 version = "0.1.0"
 description = "Industry-driven multi-agent stock picker using CrewAI"
 readme = "README.md"

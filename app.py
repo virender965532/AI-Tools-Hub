@@ -4,15 +4,13 @@ from dotenv import load_dotenv
 from datetime import datetime
 from debate.src.debate.crew import Debate
 from superviouser import superviouser_agentic_handoff
-# The package directory contains a hyphen so it cannot be imported as a normal module name.
-# We'll lazily load the StockPickerCrew class at runtime from the file path.
-import importlib.util
-StockPickerCrew = None
+# StockPickerCrew is imported lazily in start_stock_picker() to avoid import-time initialization
 import os
 import yaml
 import json
 import asyncio
 import threading
+import importlib.util
 
 load_dotenv()
 app = Flask(__name__)
@@ -22,9 +20,9 @@ app.secret_key = "supersecretkey"
 BASE_DIR = os.path.dirname(__file__)
 DEBATER_AGENTS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/agents.yaml")
 DEBATER_TASKS_FILE = os.path.join(BASE_DIR, "debate/src/debate/config/tasks.yaml")
-STOCK_AGENTS_FILE = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "config", "agents.yaml")
-STOCK_TASKS_FILE = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "config", "tasks.yaml")
-STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "stock-picker-advance", "outputs")
+STOCK_AGENTS_FILE = os.path.join(BASE_DIR, "stock_picker_advance", "src", "stock_picker", "config", "agents.yaml")
+STOCK_TASKS_FILE = os.path.join(BASE_DIR, "stock_picker_advance", "src", "stock_picker", "config", "tasks.yaml")
+STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "stock_picker_advance", "outputs")
 
 
 # === ROUTES ===
@@ -502,37 +500,54 @@ def start_stock_picker():
         min_mcap = 500000000
     valuation_pref = form.get("valuation_pref") or "balanced"
 
+    # Validate required fields
     if not industry:
-        def run_crew_background():
-            """Run crew in background thread"""
-            try:
-                # Lazy-load StockPickerCrew from the local file because the directory name contains a hyphen.
-                global StockPickerCrew
-                if StockPickerCrew is None:
-                    crew_path = os.path.join(BASE_DIR, "stock-picker-advance", "src", "stock_picker", "crew.py")
-                    spec = importlib.util.spec_from_file_location("stock_picker_crew_module", crew_path)
-                    crew_mod = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(crew_mod)
-                    StockPickerCrew = getattr(crew_mod, "StockPickerCrew")
+        flash("Industry is required.", "danger")
+        return redirect(url_for("stock_picker"))
 
-                crew = StockPickerCrew().crew()
-                inputs = {
-                    "industry": industry,
-                    "region": region,
-                    "n_picks": n_picks,
-                    "min_mcap": min_mcap,
-                    "valuation_pref": valuation_pref,
-                }
-                result = crew.kickoff(inputs=inputs)
-                print(f"✅ Stock Picker Crew Completed for {industry}")
-            except Exception as e:
-                print(f"❌ Stock Picker Crew Failed: {e}")
-                print(f"✅ Stock Picker Crew Completed for {industry}")
-            except Exception as e:
-                print(f"❌ Stock Picker Crew Failed: {e}")
+    def run_crew_background(industry_local, region_local, n_picks_local, min_mcap_local, valuation_pref_local):
+        """Run crew in background thread with lazy loading of StockPickerCrew."""
+        try:
+            # Ensure environment variables are loaded
+            import os as os_module
+            if not os_module.getenv("OPENAI_API_KEY"):
+                from dotenv import load_dotenv
+                load_dotenv()
+            
+            # Set CHROMA_OPENAI_API_KEY if OPENAI_API_KEY is set
+            if os_module.getenv("OPENAI_API_KEY") and not os_module.getenv("CHROMA_OPENAI_API_KEY"):
+                os_module.environ["CHROMA_OPENAI_API_KEY"] = os_module.getenv("OPENAI_API_KEY")
+            
+            # Add stock_picker_advance to sys.path so relative imports work
+            import sys
+            stock_picker_path = os.path.join(BASE_DIR, "stock_picker_advance")
+            if stock_picker_path not in sys.path:
+                sys.path.insert(0, stock_picker_path)
+            
+            # Now we can import normally
+            from src.stock_picker.crew import StockPickerCrew
 
-    # Start crew in background thread
-    thread = threading.Thread(target=run_crew_background, daemon=True)
+            crew = StockPickerCrew().crew()
+            inputs = {
+                "industry": industry_local,
+                "region": region_local,
+                "n_picks": n_picks_local,
+                "min_mcap": min_mcap_local,
+                "valuation_pref": valuation_pref_local,
+            }
+            result = crew.kickoff(inputs=inputs)
+            print(f"✅ Stock Picker Crew Completed for {industry_local}")
+        except Exception as e:
+            print(f"❌ Stock Picker Crew Failed for {industry_local}: {e}")
+            import traceback
+            traceback.print_exc()
+
+    # Start crew in background thread (pass arguments explicitly)
+    thread = threading.Thread(
+        target=run_crew_background,
+        args=(industry, region, n_picks, min_mcap, valuation_pref),
+        daemon=True,
+    )
     thread.start()
 
     # Redirect immediately

@@ -99,10 +99,10 @@
           <div class="bg-gray-900 p-5 rounded-xl shadow-md">
             <h3 class="text-xl font-semibold text-cyan-300 mb-3">🔍 Search Parameters</h3>
             <label class="text-gray-300">Industry (required)</label>
-            <input name="industry" required type="text" class="w-full text-black p-2 rounded mt-1 mb-3" placeholder="e.g., solar energy, fintech, biotech" value="solar energy" />
+            <input name="industry" required type="text" class="w-full text-black p-2 rounded mt-1 mb-3" placeholder="e.g., solar energy, fintech, biotech" value="banking" />
 
             <label class="text-gray-300">Region</label>
-            <input name="region" type="text" class="w-full text-black p-2 rounded mt-1" placeholder="e.g., India, US" value="India" />
+            <input name="region" type="text" class="w-full text-black p-2 rounded mt-1" placeholder="e.g., India, US" value="India (only include companies headquartered or listed in India; exclude global firms)" />
           </div>
 
           <!-- Stock Selection Criteria -->
@@ -111,7 +111,7 @@
             <label class="text-gray-300">Number of picks</label>
             <input name="n_picks" type="number" min="1" value="5" class="w-full text-black p-2 rounded mt-1 mb-3" />
 
-            <label class="text-gray-300">Min market cap (USD)</label>
+            <label class="text-gray-300">Min market cap (USD/INR)</label>
             <input name="min_mcap" type="number" value="500000000" class="w-full text-black p-2 rounded mt-1" />
           </div>
         </div>
