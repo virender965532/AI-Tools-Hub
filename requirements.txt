@@ -700,3 +700,11 @@ zipp==3.23.0
     # via importlib-metadata
 zstandard==0.23.0
     # via langsmith
+urllib
+webbrowser
+python-docx==0.8.11
+google-api-python-client
+google-auth-oauthlib
+google-auth
+asyncio
+

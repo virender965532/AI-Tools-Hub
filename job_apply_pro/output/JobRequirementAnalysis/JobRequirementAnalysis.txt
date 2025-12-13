@@ -1,0 +1,53 @@
+## Breakdown of Job Requirements for ReactJS Developer
+
+### Key Responsibilities:
+1. **Develop User-Facing Features**: Create new features that enhance the user interface using ReactJS.
+2. **Build Reusable Components**: Develop components and libraries that can be reused across different parts of the application.
+3. **Optimize Performance**: Ensure components perform well across a variety of devices and browsers, focusing on speed and efficiency.
+4. **Collaborate with Teams**: Work closely with designers, backend developers, and product managers to ensure cohesive and high-quality product delivery.
+5. **Maintain Code Quality**: Write clean, maintainable, and efficient code adhering to established best practices.
+6. **Troubleshooting and Debugging**: Identify and resolve issues within the application.
+
+### Required Skills (Hard and Soft):
+#### Hard Skills:
+- **JavaScript Proficiency**: Strong understanding of JavaScript, particularly its DOM manipulation and object model.
+- **ReactJS Mastery**: In-depth knowledge of ReactJS principles and lifecycle methods.
+- **State Management**: Experience with state management libraries like Redux, Context API, or MobX.
+- **API Familiarity**: Knowledge of working with RESTful APIs and handling JSON data.
+- **Front-End Tools**: Experience with front-end build tools (Webpack, Babel) and modern workflows.
+- **Web Technologies**: Proficiency in HTML5 and CSS3, along with an understanding of responsive design.
+- **Version Control**: Familiarity with Git and version control practices.
+- **Cross-Browser Compatibility**: Good understanding of potential cross-browser issues and how to address them.
+
+#### Soft Skills:
+- **Collaboration**: Ability to work effectively in a team environment and communicate ideas clearly.
+- **Problem-Solving**: Strong analytical skills to troubleshoot and debug issues efficiently.
+- **Adaptability**: Willingness to learn and adapt to new tools and technologies.
+- **Attention to Detail**: Careful approach to code quality and user experience.
+
+### Seniority Level:
+- **Mid-Level**: The role appears to be suited for a mid-level ReactJS Developer with some experience but does not explicitly require senior-level experience.
+
+### Mandatory vs Nice-to-Have Qualifications:
+#### Mandatory Qualifications:
+- Strong proficiency in JavaScript and ReactJS.
+- Experience with state management libraries (Redux, Context API, MobX).
+- Familiarity with RESTful APIs, HTML5, CSS3, and responsive design.
+- Knowledge of modern front-end build tools (e.g., Webpack, Babel).
+
+#### Nice-to-Have Qualifications:
+- Experience with TypeScript or testing frameworks (Jest, Enzyme).
+- Familiarity with additional libraries or frameworks (e.g., Next.js, Gatsby).
+- Previous involvement in large-scale projects or open-source contributions.
+
+### Suggested Interview Topics:
+1. **ReactJS Basics**: Candidate's understanding of components, props, state, and lifecycle methods.
+2. **State Management**: Discuss the differences between Redux and Context API, and when to use each.
+3. **Performance Optimization**: Ask about techniques for optimizing React applications for performance (e.g., memoization, lazy loading).
+4. **Code Review**: Have candidates explain a piece of code they have written, focusing on design decisions and optimizations.
+5. **APIs and Data Handling**: Evaluate their experience with fetching and managing data in a React application.
+6. **Debugging and Troubleshooting**: Present a common bug or performance issue and ask how they would approach solving it.
+7. **Team Collaboration**: Explore how they have worked with designers and backend developers in past projects.
+8. **Cross-Browser Issues**: Discuss strategies for ensuring compatibility across different browsers.
+
+This structured breakdown provides a clear overview of the expectations and skills required for the ReactJS Developer position, aiding both recruiters and candidates in the selection process.

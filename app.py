@@ -2,7 +2,9 @@ from agents import trace
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import datetime
-from debate.src.debate.crew import Debate
+from urllib.parse import urlparse
+# from debate.src.debate.crew import Debate
+from job_apply_pro.job_apply_pro import run_recruitment_pipeline
 from superviouser import superviouser_agentic_handoff
 # StockPickerCrew is imported lazily in start_stock_picker() to avoid import-time initialization
 import os
@@ -11,6 +13,8 @@ import json
 import asyncio
 import threading
 import importlib.util
+import re
+from Constants.constants import get_ai_tools
 
 load_dotenv()
 app = Flask(__name__)
@@ -29,107 +33,129 @@ STOCK_OUTPUTS_DIR = os.path.join(BASE_DIR, "outputs")
 
 @app.route("/")
 def home():
-    """Home Page - Shows Available AI Tools"""
     current_year = datetime.now().year
-    tools = [
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot1.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI: Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot13.png"
-        },
-        {
-            "url": "/ai/tool/stock-picker/about",
-            "title": "StockCraft AI: CrewAI Industry Stock Picker",
-            "description": "StockCraft AI uses a CrewAI multi-agent pipeline to discover, screen and rank public companies by industry with auditable outputs and configurable weighting (value/growth/balanced).",
-            "image": "images/robot6.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot2.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot4.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot5.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot6.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot7.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot8.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot9.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot10.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot11.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot12.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot13.png"
-        },
-        {
-            "url": "/ai/tool/nuro-debater/about",
-            "title": "Neuro Debate AI - Autonomous Multi-Agent Debate System",
-            "description": """Neuro Debate AI simulates structured debates between intelligent AI entities using CrewAI orchestration.""",
-            "image": "images/robot14.png"
-        },
-        {
-            "url": "/ai/tool/superviouser/about",
-            "title": "Superviouser: An Autonomous Multi-Agent Email Intelligence System",
-            "description": """Superviouser is an advanced AI-driven agent orchestration framework designed to autonomously generate, evaluate, format, and deliver cold sales emails using multi-agent collaboration.""",
-            "image": "images/robot5.png"
-        },
-    ]
+    tools = get_ai_tools()
     return render_template("home.html", year=current_year, tools=tools)
+
+
+@app.route("/ai/tool/agentic-applypro/about")
+def jobapply_about():
+    current_year = datetime.now().year
+    return render_template("jobapplypro_about.html", year=current_year)
+
+@app.route("/ai/tool/agentic-applypro", methods=["GET", "POST"])
+def jobapply():
+    current_year = datetime.now().year
+
+    # Default values (for GET or failed POST)
+    old_values = {
+        "hiring_manager_email": "virender8800745356@gmail.com",
+        "job_requirement": """Job Summary:
+
+
+We are looking for a skilled ReactJS Developer to join our team. The ideal candidate will be responsible for developing and implementing user interface components using ReactJS concepts and workflows. You will also be responsible for profiling and improving front-end performance and documenting our front-end codebase.
+
+
+Key Responsibilities:
+
+
+Develop new user-facing features using ReactJS.
+Build reusable components and front-end libraries for future use.
+Optimize components for maximum performance across a vast array of web-capable devices and browsers.
+Collaborate with designers, backend developers, and product managers to deliver high-quality solutions.
+Write clean, maintainable, and efficient code following best practices.
+Troubleshoot and debug application issues.
+
+Required Skills & Qualifications:
+
+
+Strong proficiency in JavaScript, including DOM manipulation and the JavaScript object model.
+Thorough understanding of ReactJS and its core principles.
+Experience with popular ReactJS workflows (such as Redux, Context API, or MobX).
+Familiarity with RESTful APIs and JSON.
+Knowledge of modern front-end build pipelines and tools (Webpack, Babel, etc.).
+Experience with HTML5, CSS3, and responsive design principles.
+Familiarity with Git and version control systems.
+Good understanding of cross-browser compatibility issues.""",
+        "reparse": False
+    }
+    
+    if request.method == "POST":
+        # Extract inputs from form
+        hiring_manager_email = request.form.get("hiring_manager_email", "").strip()
+        job_requirement = request.form.get("job_requirement", "").strip()
+        reparse = request.form.get("reparse", "off") == "on"
+    
+        # Store old values back so template can reuse them
+        old_values = {
+            "hiring_manager_email": hiring_manager_email,
+            "job_requirement": job_requirement,
+            "reparse": reparse
+        }
+
+        # 1. Empty fields
+        if not hiring_manager_email or not job_requirement:
+            flash("All fields are required. Please fill out the form completely.", "danger")
+            return render_template("jobapplypro.html", year=current_year, old=old_values)
+
+        # 2. Email format
+        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        if not re.match(email_pattern, hiring_manager_email):
+            flash("Invalid email format for Hiring Manager Email.", "danger")
+            return render_template("jobapplypro.html", year=current_year, old=old_values)
+
+        # 3. JD min length
+        if len(job_requirement) < 30:
+            flash("Job description is too short. Please paste the full requirement.", "warning")
+            return render_template("jobapplypro.html", year=current_year, old=old_values)
+
+        try:
+            result = asyncio.run(run_recruitment_pipeline(
+                job_requirement,
+                hiring_manager_email,
+                reparse
+            ))
+
+            safe_result = result.to_dict() if hasattr(result, "to_dict") else result
+            if isinstance(safe_result, str):
+                safe_result = json.loads(safe_result)
+            print("Pipeline Result:", safe_result.final_output)
+            if safe_result.final_output:
+
+                # Extract email domain
+                domain = hiring_manager_email.split("@")[1]     # e.g., gmail.com
+
+                # Timestamp in format: 2025_12_03_01_11_13
+                timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+
+                # Filename
+                filename = f"{domain}_{timestamp}.json"
+
+                # Folder to store saved pipeline results
+                save_dir = "job_apply_pro/history"
+                os.makedirs(save_dir, exist_ok=True)
+
+                # Full file path
+                filepath = os.path.join(save_dir, filename)
+
+                # Save JSON file
+                with open(filepath, "w", encoding="utf-8") as f:
+                    json.dump(safe_result.final_output, f, ensure_ascii=False, indent=4)
+
+                flash(f"Job application email sent successfully and saved as {filename}", "success")
+
+            else:
+                flash(f"Failed to send email: {safe_result.get('error')}", "danger")
+
+        except Exception as e:
+            flash(f"An error occurred: {str(e)}", "danger")
+
+        # Continue to next step
+        return redirect(url_for("jobapply"))
+
+    # GET Request
+    return render_template("jobapplypro.html", year=current_year, old=old_values)
+
 
 
 # === Superviouser Pages ===
@@ -178,15 +204,15 @@ def superviouser():
 
 # === Neuro Debater Pages ===
 
-@app.route("/ai/tool/nuro-debater/about")
-def nuro_debater_about():
+# @app.route("/ai/tool/nuro-debater/about")
+# def nuro_debater_about():
     """About Page for Neuro Debater"""
     current_year = datetime.now().year
     return render_template("debater/nuro_debater_about.html", year=current_year)
 
 
-@app.route("/ai/tool/nuro-debater")
-def nuro_debater():
+# @app.route("/ai/tool/nuro-debater")
+# def nuro_debater():
     """Loads Editable YAML UI for Neuro Debater"""
     current_year = datetime.now().year
     try:
@@ -206,8 +232,8 @@ def nuro_debater():
     )
 
 
-@app.route("/ai/tool/nuro-debater/start", methods=["POST"])
-def start_nuro_debater():
+# @app.route("/ai/tool/nuro-debater/start", methods=["POST"])
+# def start_nuro_debater():
     import yaml
 
     form = request.form
@@ -295,15 +321,15 @@ def start_nuro_debater():
     )
 
 
-@app.route("/ai/tool/stock-picker/about")
-def stock_picker_about():
+# @app.route("/ai/tool/stock-picker/about")
+# def stock_picker_about():
     """About Page for StockCraft AI (Stock Picker)"""
     current_year = datetime.now().year
     return render_template("stock_picker/stock_picker_about.html", year=current_year)
 
 
-@app.route("/ai/tool/stock-picker")
-def stock_picker():
+# @app.route("/ai/tool/stock-picker")
+# def stock_picker():
     """Loads editable YAML UI for Stock Picker"""
     current_year = datetime.now().year
     try:
@@ -368,10 +394,8 @@ def stock_picker():
                         parsed = ast.literal_eval(v)
                     except Exception:
                         # remove surrounding quotes if any
-                        if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
-                            parsed = v[1:-1]
-                        else:
-                            parsed = v
+                        if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")): parsed = v[1:-1]
+                        else: parsed = v
                     result[k] = parsed
                 return result
 
@@ -488,8 +512,8 @@ def stock_picker():
     )
 
 
-@app.route("/ai/tool/stock-picker/start", methods=["POST"])
-def start_stock_picker():
+# @app.route("/ai/tool/stock-picker/start", methods=["POST"])
+# def start_stock_picker():
     form = request.form
     industry = form.get("industry", "").strip()
     region = form.get("region", "India").strip() or "India"
@@ -557,8 +581,8 @@ def start_stock_picker():
 
 # === Fallback Tool Page ===
 
-@app.route("/tool/<tool_name>")
-def tool_page(tool_name):
+# @app.route("/tool/<tool_name>")
+# def tool_page(tool_name):
     try:
         return render_template("ai_page.html", tool_name=tool_name)
     except Exception as e:
@@ -567,4 +591,6 @@ def tool_page(tool_name):
 
 # === MAIN ===
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    debug_mode = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
+    port = int(os.getenv("PORT", 5000))
+    app.run(debug=debug_mode, port=port)
